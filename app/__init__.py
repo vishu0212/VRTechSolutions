@@ -139,13 +139,23 @@ def create_app(config_object=None):
     from app.routes.main import main_bp
     from app.routes.careers import careers_bp
     from app.routes.admin import admin_bp
+    from app.routes.seo import seo_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(careers_bp)
+    app.register_blueprint(seo_bp)
 
     app.register_blueprint(
         admin_bp,
         url_prefix="/admin",
+    )
+
+    # -----------------------------------------------------
+    # LOG REGISTERED SEO ROUTES
+    # -----------------------------------------------------
+
+    app.logger.info(
+        "SEO routes registered: /sitemap.xml and /robots.txt"
     )
 
     # -----------------------------------------------------
