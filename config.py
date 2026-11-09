@@ -12,12 +12,19 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-IS_VERCEL = bool(os.getenv("VERCEL"))
+IS_VERCEL = os.getenv("VERCEL", "").strip().lower() in {
+    "1", "true", "yes"
+}
 
+# Load .env only during local development.
+# Vercel provides environment variables through its dashboard.
 if not IS_VERCEL:
-    from dotenv import load_dotenv
+    try:
+        from dotenv import load_dotenv
 
-    load_dotenv(BASE_DIR / ".env")
+        load_dotenv(BASE_DIR / ".env")
+    except ImportError:
+        pass
 
 
 # =========================================================
@@ -27,12 +34,10 @@ if not IS_VERCEL:
 APP_DIR = BASE_DIR / "app"
 STATIC_DIR = APP_DIR / "static"
 
-# Local private resume storage.
 LOCAL_RESUME_FOLDER = (
     BASE_DIR / "instance" / "uploads" / "resumes"
 )
 
-# Temporary resume storage on Vercel.
 VERCEL_RESUME_FOLDER = (
     Path("/tmp/vr_tech_solutions_instance")
     / "uploads"
@@ -45,7 +50,6 @@ RESUME_UPLOAD_FOLDER = (
     else LOCAL_RESUME_FOLDER
 )
 
-# Public image uploads.
 PUBLIC_UPLOAD_FOLDER = STATIC_DIR / "uploads"
 
 
@@ -62,10 +66,7 @@ def get_bool(name: str, default: bool = False) -> bool:
         return default
 
     return value.strip().lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
+        "1", "true", "yes", "on"
     }
 
 
@@ -79,7 +80,6 @@ def get_int(name: str, default: int) -> int:
 
     try:
         return int(value)
-
     except ValueError as exc:
         raise ValueError(
             f"Environment variable {name} must be an integer."
@@ -108,10 +108,13 @@ class Config:
 
     MONGODB_URI = os.getenv("MONGODB_URI")
 
-    MONGODB_DATABASE = "vr_tech_solutions"
+    MONGODB_DATABASE = os.getenv(
+        "MONGODB_DATABASE",
+        "vr_tech_solutions",
+    )
 
     # -----------------------------------------------------
-    # FILE UPLOADS
+    # FILE UPLOAD CONFIGURATION
     # -----------------------------------------------------
 
     RESUME_UPLOAD_FOLDER = str(
@@ -134,7 +137,7 @@ class Config:
     }
 
     # -----------------------------------------------------
-    # SESSION SECURITY
+    # SESSION CONFIGURATION
     # -----------------------------------------------------
 
     SESSION_COOKIE_HTTPONLY = True

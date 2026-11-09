@@ -1,11 +1,4 @@
-"""WSGI entrypoint for deployment platforms."""
-
-import os
-
-if not os.getenv("VERCEL"):
-    from dotenv import load_dotenv
-
-    load_dotenv()
+"""WSGI entrypoint for Vercel."""
 
 from app import create_app
 
