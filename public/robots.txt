@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /search
+
+Sitemap: https://vr-tech-solutions-flax.vercel.app/sitemap.xml
