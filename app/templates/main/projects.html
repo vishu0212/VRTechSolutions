@@ -1,0 +1,93 @@
+
+{% extends "base.html" %}
+{% block title %}Projects &amp; Case Studies | VR Tech Solutions{% endblock %}
+{% block meta_description %}Explore illustrative software, AI, automation, and digital platform projects from VR Tech Solutions.{% endblock %}
+{% block content %}
+<section class="vtx-hero">
+    <div class="vtx-container vtx-hero-grid">
+        <div class="vtx-hero-copy"><div class="vtx-kicker"><span class="vtx-kicker-dot"></span> PROJECTS · PRODUCTS · PROBLEM SOLVING</div><h1>Thoughtful ideas. <span class="vtx-gradient-text">Useful technology.</span></h1><p class="vtx-lead">Explore examples of the digital products and systems we can design: from citizen-service portals to AI-supported workflows and custom business applications.</p><div class="vtx-actions"><a href="{{ url_for('main.contact') }}" class="vtx-button vtx-button-primary">Discuss your project <span>↗</span></a><a href="#project-gallery" class="vtx-button vtx-button-secondary">Browse projects <span>↓</span></a></div><div class="vtx-hero-meta"><div class="vtx-meta-item"><strong>Product Thinking</strong><span>Useful user journeys</span></div><div class="vtx-meta-divider"></div><div class="vtx-meta-item"><strong>Clean Engineering</strong><span>Maintainable systems</span></div><div class="vtx-meta-divider"></div><div class="vtx-meta-item"><strong>Real Workflows</strong><span>Designed for people</span></div></div></div>
+        <div class="vtx-visual" aria-label="Illustration of a connected software project"><div class="vtx-orbit vtx-orbit-a"></div><div class="vtx-orbit vtx-orbit-b"></div><div class="vtx-orbit vtx-orbit-c"></div><div class="vtx-orb-core"><span class="vtx-orb-mark">VR</span><strong>PROJECTS</strong><small>DESIGN · BUILD · GROW</small><div class="vtx-orb-pill">● IDEAS INTO PRODUCTS</div></div><div class="vtx-node vtx-node-a"><span class="vtx-node-icon vtx-ico-blue">✦</span><div><strong>AI Applications</strong><small><i class="vtx-dot"></i> Smarter tools</small></div></div><div class="vtx-node vtx-node-b"><span class="vtx-node-icon vtx-ico-pink">&lt;/&gt;</span><div><strong>Web Platforms</strong><small><i class="vtx-dot"></i> Responsive UI</small></div></div><div class="vtx-node vtx-node-c"><span class="vtx-node-icon vtx-ico-cyan">▤</span><div><strong>Citizen Services</strong><small><i class="vtx-dot"></i> Clear workflows</small></div></div><div class="vtx-node vtx-node-d"><span class="vtx-node-icon vtx-ico-green">⚙</span><div><strong>Automation</strong><small><i class="vtx-dot"></i> Less repetition</small></div></div><div class="vtx-node vtx-node-e"><span class="vtx-node-icon vtx-ico-orange">◉</span><div><strong>Data Systems</strong><small><i class="vtx-dot"></i> Better visibility</small></div></div><div class="vtx-node vtx-node-f"><span class="vtx-node-icon vtx-ico-purple">▱</span><div><strong>Digital Strategy</strong><small><i class="vtx-dot"></i> Clear direction</small></div></div></div>
+    </div>
+</section>
+
+{% if projects %}
+<section class="vtx-section" id="published-projects">
+    <div class="vtx-container">
+        <div class="vtx-section-heading">
+            <div class="vtx-kicker">OUR PROJECTS</div>
+            <h2>Work published by <span class="vtx-gradient-text">our team.</span></h2>
+            <p>Projects shared by the VR Tech Solutions team.</p>
+        </div>
+        <div class="vtx-card-grid vtx-project-grid">
+            {% for project in projects %}
+            <article class="vtx-card vtx-project-card">
+                {% if project.image_url %}
+                <div style="height:190px;overflow:hidden">
+                    <img src="{{ project.image_url }}" alt="{{ project.title }}"
+                         loading="lazy"
+                         style="display:block;width:100%;height:100%;object-fit:cover">
+                </div>
+                {% else %}
+                <div class="vtx-project-art">
+                    <div class="vtx-art-panel">
+                        <small>{{ project.category or "Project" }}</small>
+                        <strong>{{ project.title }}</strong>
+                        <div class="vtx-art-line"></div>
+                        <div class="vtx-art-line" style="width:75%"></div>
+                        <div class="vtx-art-line" style="width:55%"></div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="vtx-project-body">
+                    <div class="vtx-project-topline">
+                        <span class="vtx-project-category">{{ project.category or "Project" }}</span>
+                        {% if project.is_featured %}
+                        <span class="vtx-project-status">Featured</span>
+                        {% endif %}
+                    </div>
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.short_description or project.description }}</p>
+                    {% if project.technologies %}
+                    <div class="vtx-project-meta">
+                        {% for technology in project.technologies.split(",") %}
+                        {% if technology.strip() %}
+                        <span>{{ technology.strip() }}</span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if project.project_url %}
+                    <a class="vtx-card-link" href="{{ project.project_url }}"
+                       target="_blank" rel="noopener noreferrer">
+                        Visit project <span>↗</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="vtx-section" id="project-gallery">
+    <div class="vtx-container">
+        <div class="vtx-section-heading"><div class="vtx-kicker">SELECTED WORK &amp; CONCEPTS</div><h2>Solutions shaped around <span class="vtx-gradient-text">real needs.</span></h2><p>These examples illustrate project types and capabilities. They are not presented as verified client case studies or performance claims.</p></div>
+        <div class="vtx-project-filters" role="group" aria-label="Filter projects">
+            <button class="vtx-filter is-selected" type="button" data-project-filter="all" aria-pressed="true">All projects</button><button class="vtx-filter" type="button" data-project-filter="software" aria-pressed="false">Software</button><button class="vtx-filter" type="button" data-project-filter="ai" aria-pressed="false">AI &amp; automation</button><button class="vtx-filter" type="button" data-project-filter="platform" aria-pressed="false">Digital platforms</button>
+        </div>
+        <div class="vtx-card-grid vtx-project-grid">
+            <article class="vtx-card vtx-project-card" data-project-card data-category="platform software"><div class="vtx-project-art"><div class="vtx-art-panel"><small>Citizen services / portal</small><strong>CivicPulse</strong><div class="vtx-art-line"></div><div class="vtx-art-line" style="width:75%"></div><div class="vtx-art-line" style="width:55%"></div></div></div><div class="vtx-project-body"><div class="vtx-project-topline"><span class="vtx-project-category">Digital platform</span><span class="vtx-project-status">Project concept</span></div><h3>Citizen Grievance &amp; Resolution Portal</h3><p>A portal concept for complaint submission, status tracking, officer workflows, and transparent communication between citizens and service teams.</p><div class="vtx-project-meta"><span>ASP.NET Core</span><span>MySQL</span><span>Role-Based Access</span></div></div></article>
+            <article class="vtx-card vtx-project-card" data-project-card data-category="ai software"><div class="vtx-project-art" style="background:radial-gradient(circle at 50% 50%,rgba(168,85,247,.3),transparent 42%),linear-gradient(135deg,#0b1533,#1b245a 55%,#4d256d)"><div class="vtx-art-panel"><small>AI workspace / knowledge</small><strong>Smart Assistant</strong><div class="vtx-art-line"></div><div class="vtx-art-line" style="width:69%"></div><div class="vtx-art-line" style="width:84%"></div></div></div><div class="vtx-project-body"><div class="vtx-project-topline"><span class="vtx-project-category">AI application</span><span class="vtx-project-status">Project concept</span></div><h3>AI Knowledge &amp; Support Assistant</h3><p>An assistant concept that can search approved documents, summarize information, and help teams answer recurring questions more consistently.</p><div class="vtx-project-meta"><span>LLM Integration</span><span>RAG</span><span>Knowledge Search</span></div></div></article>
+            <article class="vtx-card vtx-project-card" data-project-card data-category="ai software"><div class="vtx-project-art" style="background:radial-gradient(circle at 50% 50%,rgba(16,185,129,.25),transparent 42%),linear-gradient(135deg,#071d31,#103b59 55%,#263c77)"><div class="vtx-art-panel"><small>Operations / workflow</small><strong>FlowPilot</strong><div class="vtx-art-line"></div><div class="vtx-art-line" style="width:61%"></div><div class="vtx-art-line" style="width:78%"></div></div></div><div class="vtx-project-body"><div class="vtx-project-topline"><span class="vtx-project-category">Workflow automation</span><span class="vtx-project-status">Project concept</span></div><h3>Business Workflow Automation</h3><p>A workflow concept to connect routine tasks, notify the right people, maintain records, and surface exceptions for review.</p><div class="vtx-project-meta"><span>Python</span><span>REST APIs</span><span>Process Design</span></div></div></article>
+            <article class="vtx-card vtx-project-card" data-project-card data-category="software platform"><div class="vtx-project-art" style="background:radial-gradient(circle at 50% 50%,rgba(249,115,22,.22),transparent 42%),linear-gradient(135deg,#11182b,#273a69 55%,#5e315f)"><div class="vtx-art-panel"><small>Business dashboard / insights</small><strong>InsightBoard</strong><div class="vtx-art-line"></div><div class="vtx-art-line" style="width:81%"></div><div class="vtx-art-line" style="width:47%"></div></div></div><div class="vtx-project-body"><div class="vtx-project-topline"><span class="vtx-project-category">Business software</span><span class="vtx-project-status">Project concept</span></div><h3>Operations &amp; Reporting Dashboard</h3><p>A responsive dashboard concept for bringing key operational records, filters, summaries, and task status into one interface.</p><div class="vtx-project-meta"><span>Flask</span><span>MySQL</span><span>Data Visualization</span></div></div></article>
+            <article class="vtx-card vtx-project-card" data-project-card data-category="platform software"><div class="vtx-project-art" style="background:radial-gradient(circle at 50% 50%,rgba(56,189,248,.23),transparent 42%),linear-gradient(135deg,#061a33,#214775 55%,#4a397b)"><div class="vtx-art-panel"><small>Brand / content platform</small><strong>Digital Media CMS</strong><div class="vtx-art-line"></div><div class="vtx-art-line" style="width:73%"></div><div class="vtx-art-line" style="width:63%"></div></div></div><div class="vtx-project-body"><div class="vtx-project-topline"><span class="vtx-project-category">Publishing platform</span><span class="vtx-project-status">Project concept</span></div><h3>Digital News &amp; Content Management</h3><p>A publishing platform concept with article management, categories, user roles, review workflows, and a reader-focused frontend.</p><div class="vtx-project-meta"><span>Flask</span><span>Content Management</span><span>SEO Structure</span></div></div></article>
+            <article class="vtx-card vtx-project-card" data-project-card data-category="ai software"><div class="vtx-project-art" style="background:radial-gradient(circle at 50% 50%,rgba(217,70,239,.25),transparent 42%),linear-gradient(135deg,#11142e,#2a286a 55%,#71326b)"><div class="vtx-art-panel"><small>Customer journeys / messaging</small><strong>ConnectFlow</strong><div class="vtx-art-line"></div><div class="vtx-art-line" style="width:66%"></div><div class="vtx-art-line" style="width:88%"></div></div></div><div class="vtx-project-body"><div class="vtx-project-topline"><span class="vtx-project-category">Customer automation</span><span class="vtx-project-status">Project concept</span></div><h3>Customer Enquiry &amp; Follow-Up System</h3><p>A lightweight system concept for capturing enquiries, routing requests, tracking follow-ups, and keeping conversations organized.</p><div class="vtx-project-meta"><span>Automation</span><span>CRM Workflows</span><span>Integrations</span></div></div></article>
+        </div>
+    </div>
+</section>
+
+<section class="vtx-section vtx-section-tint"><div class="vtx-narrow"><div class="vtx-case-band"><div><div class="vtx-kicker">HAVE A CHALLENGE IN MIND?</div><h3>Let's shape a solution around your workflow.</h3><a class="vtx-text-link" href="{{ url_for('main.contact') }}">Share your project idea <span>↗</span></a></div><div><p>Tell us the problem you want to solve, the people who will use the system, and any technical constraints. We can turn that into a practical first scope and a clear next step.</p><div class="vtx-case-chips"><span class="vtx-tag">Discovery</span><span class="vtx-tag">UX &amp; UI</span><span class="vtx-tag">Development</span><span class="vtx-tag">Integration</span><span class="vtx-tag">Iteration</span></div></div></div></div></section>
+
+<section class="vtx-container vtx-cta"><div class="vtx-cta-inner"><div class="vtx-kicker">START WITH A CONVERSATION</div><h2>Have a project you want to <span>bring to life?</span></h2><p>We would be glad to hear what you are planning and help identify a sensible route from idea to implementation.</p><a href="{{ url_for('main.contact') }}" class="vtx-button vtx-button-white">Contact our team <span>↗</span></a></div></section>
+{% endblock %}

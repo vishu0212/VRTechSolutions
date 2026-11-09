@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="en" data-admin-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2f5ff">
+
+    <title>Admin Login | VR Tech Solutions</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Admin CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/admin-panel.css') }}"
+    >
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/professional.css') }}">
+</head>
+
+<body class="va-login-body">
+
+    <div class="va-bg-glow" aria-hidden="true"></div>
+
+    <main class="va-login-shell">
+
+        <!-- BRAND -->
+        <a
+            class="va-brand va-login-brand"
+            href="{{ url_for('main.index') }}"
+        >
+            <span class="va-brand-mark">VR</span>
+
+            <span class="va-brand-text">
+                <strong>TECH SOLUTIONS</strong>
+                <small>ADMIN CONSOLE</small>
+            </span>
+        </a>
+
+        <!-- LOGIN CARD -->
+        <section class="va-login-card">
+
+            <div class="va-login-icon">
+                <i data-lucide="shield-check"></i>
+            </div>
+
+            <div class="va-eyebrow">
+                SECURE ADMIN ACCESS
+            </div>
+
+            <h1>Welcome back.</h1>
+
+            <p class="va-login-subtitle">
+                Sign in to manage website content, services, projects,
+                enquiries, job vacancies, and career applications.
+            </p>
+
+            <!-- FLASH MESSAGES -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="va-flash-stack" aria-live="polite">
+
+                        {% for category, message in messages %}
+                            <div
+                                class="va-flash va-flash-{{ category }}"
+                                role="alert"
+                            >
+                                <span>{{ message }}</span>
+
+                                <button
+                                    type="button"
+                                    class="va-flash-close"
+                                    aria-label="Dismiss message"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- LOGIN FORM -->
+            <form
+                method="POST"
+                action="{{ url_for('admin.login') }}"
+                class="va-form va-login-form"
+            >
+
+                <!-- CSRF protection, if enabled in the application -->
+                {% if csrf_token is defined %}
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+                {% endif %}
+
+                <!-- USERNAME OR EMAIL -->
+                <div class="va-field">
+
+                    <label for="adminUsername">
+                        Username or email address
+                    </label>
+
+                    <div class="va-input-with-icon">
+
+                        <i data-lucide="user-round"></i>
+
+                        <input
+                            id="adminUsername"
+                            type="text"
+                            name="username"
+                            autocomplete="username"
+                            placeholder="Enter username or email"
+                            maxlength="254"
+                            required
+                            autofocus
+                        >
+
+                    </div>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="va-field">
+
+                    <label for="adminPassword">
+                        Password
+                    </label>
+
+                    <div class="va-input-with-icon">
+
+                        <i data-lucide="lock-keyhole"></i>
+
+                        <input
+                            id="adminPassword"
+                            type="password"
+                            name="password"
+                            autocomplete="current-password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                        <button
+                            class="va-password-toggle"
+                            type="button"
+                            id="vaPasswordToggle"
+                            aria-label="Show password"
+                            aria-pressed="false"
+                        >
+                            <i data-lucide="eye"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <button
+                    type="submit"
+                    class="va-btn va-btn-primary va-btn-wide"
+                >
+                    <span>Sign in to dashboard</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+
+            </form>
+
+            <!-- SECURITY MESSAGE -->
+            <div class="va-login-security">
+
+                <i data-lucide="shield-check"></i>
+
+                <span>
+                    Authorized personnel only. Keep your credentials private.
+                </span>
+
+            </div>
+
+        </section>
+
+        <!-- BACK TO WEBSITE -->
+        <a
+            class="va-back-website"
+            href="{{ url_for('main.index') }}"
+        >
+            <i data-lucide="arrow-left"></i>
+            <span>Back to website</span>
+        </a>
+
+        <p class="va-login-copyright">
+            &copy; 2026 VR Tech Solutions. All rights reserved.
+        </p>
+
+    </main>
+
+    <!-- ADMIN JAVASCRIPT -->
+    <script
+        src="{{ url_for('static', filename='js/admin-panel.js') }}"
+        defer
+    ></script>
+
+    <!-- LOGIN PAGE JAVASCRIPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // Initialize Lucide icons.
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+
+            // Show/hide password.
+            const toggle = document.getElementById("vaPasswordToggle");
+            const password = document.getElementById("adminPassword");
+
+            if (toggle && password) {
+                toggle.addEventListener("click", function () {
+
+                    const showPassword = password.type === "password";
+
+                    password.type = showPassword ? "text" : "password";
+
+                    toggle.setAttribute(
+                        "aria-label",
+                        showPassword ? "Hide password" : "Show password"
+                    );
+
+                    toggle.setAttribute(
+                        "aria-pressed",
+                        String(showPassword)
+                    );
+
+                    const icon = toggle.querySelector("i");
+
+                    if (icon) {
+                        icon.setAttribute(
+                            "data-lucide",
+                            showPassword ? "eye-off" : "eye"
+                        );
+                    }
+
+                    if (window.lucide) {
+                        window.lucide.createIcons();
+                    }
+                });
+            }
+
+            // Dismiss flash messages.
+            document.querySelectorAll(".va-flash-close").forEach(
+                function (button) {
+
+                    button.addEventListener("click", function () {
+
+                        const flash = button.closest(".va-flash");
+
+                        if (flash) {
+                            flash.remove();
+                        }
+
+                    });
+
+                }
+            );
+
+        });
+    </script>
+
+</body>
+</html>

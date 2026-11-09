@@ -1,0 +1,51 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Local database and private files
+instance/
+*.db
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+
+# Uploaded files
+app/static/uploads/
+uploads/
+resumes/
+
+# Vercel
+.vercel/
+
+# Testing and coverage
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local utilities and backups
+backups/
+tools/
+check_admin.py
+create_admin.py
+test_mongodb.py
+migrations_sql_backup/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

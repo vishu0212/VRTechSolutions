@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}About Us | VR Tech Solutions{% endblock %}
+{% block meta_description %}Learn about the approach and values behind VR Tech Solutions and our focus on useful, thoughtful technology.{% endblock %}
+{% block content %}
+<section class="vtx-hero">
+    <div class="vtx-container vtx-hero-grid">
+        <div class="vtx-hero-copy"><div class="vtx-kicker"><span class="vtx-kicker-dot"></span> WHO WE ARE</div><h1>Technology with <span class="vtx-gradient-text">purpose.</span> Built around people.</h1><p class="vtx-lead">VR Tech Solutions brings together software, AI, and automation to help turn business ideas into clear, practical digital experiences.</p><div class="vtx-actions"><a class="vtx-button vtx-button-primary" href="{{ url_for('main.contact') }}">Let's work together <span>↗</span></a><a class="vtx-button vtx-button-secondary" href="#our-approach">Our approach <span>↓</span></a></div><div class="vtx-hero-meta"><div class="vtx-meta-item"><strong>People First</strong><span>Designed for real users</span></div><div class="vtx-meta-divider"></div><div class="vtx-meta-item"><strong>Clear Process</strong><span>Transparent collaboration</span></div><div class="vtx-meta-divider"></div><div class="vtx-meta-item"><strong>Continuous Learning</strong><span>Always improving</span></div></div></div>
+        <div class="vtx-about-visual" aria-label="VR Tech Solutions technology orbit illustration"><div class="vtx-about-orbit"></div><div class="vtx-about-orbit"></div><div class="vtx-about-orbit"></div><div class="vtx-about-core"><strong>VR</strong><span>TECH SOLUTIONS</span></div></div>
+    </div>
+</section>
+
+<section class="vtx-section"><div class="vtx-container"><div class="vtx-section-heading"><div class="vtx-kicker">OUR PURPOSE</div><h2>Make technology feel <span class="vtx-gradient-text">clear and useful.</span></h2><p>Good technology is more than a collection of features. It should solve a real problem, support the people using it, and be manageable as needs change.</p></div><div class="vtx-values-grid">
+    <article class="vtx-value-card"><div class="vtx-value-icon">◎</div><h3>Understand before building</h3><p>We start with context, goals, and user needs so the solution responds to the right problem.</p></article>
+    <article class="vtx-value-card"><div class="vtx-value-icon">✦</div><h3>Use technology thoughtfully</h3><p>We select tools and architecture to suit the task instead of adding complexity without a reason.</p></article>
+    <article class="vtx-value-card"><div class="vtx-value-icon">↗</div><h3>Design for progress</h3><p>We value clarity, maintainability, feedback, and steady improvements after the first release.</p></article>
+</div></div></section>
+
+<section class="vtx-section vtx-section-tint" id="our-approach"><div class="vtx-container"><div class="vtx-section-heading"><div class="vtx-kicker">OUR APPROACH</div><h2>One connected process. <span class="vtx-gradient-text">Shared direction.</span></h2><p>We keep decisions visible and involve stakeholders through each stage of the work.</p></div><div class="vtx-timeline">
+    <article class="vtx-timeline-step"><div class="vtx-timeline-dot"></div><h3>Listen</h3><p>Clarify the challenge, audience, goals, and constraints.</p></article>
+    <article class="vtx-timeline-step"><div class="vtx-timeline-dot"></div><h3>Plan</h3><p>Define the scope, user journeys, technical approach, and priorities.</p></article>
+    <article class="vtx-timeline-step"><div class="vtx-timeline-dot"></div><h3>Build</h3><p>Develop and validate the solution in useful, reviewable increments.</p></article>
+    <article class="vtx-timeline-step"><div class="vtx-timeline-dot"></div><h3>Improve</h3><p>Use feedback to guide future refinements and new capabilities.</p></article>
+</div></div></section>
+
+<section class="vtx-section"><div class="vtx-container vtx-hero-grid" style="grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)"><div><div class="vtx-kicker">WHAT WE CARE ABOUT</div><h2 style="margin:13px 0;font-size:clamp(30px,4vw,44px);letter-spacing:-.045em;font-weight:800;line-height:1.14">Useful outcomes over <span class="vtx-gradient-text">unnecessary complexity.</span></h2><p class="vtx-lead">Whether the work is a website, a business portal, an AI assistant, or an automation workflow, we focus on how it will be used and maintained—not just how it looks on launch day.</p><div class="vtx-tag-row" style="margin-top:22px"><span class="vtx-tag">Clarity</span><span class="vtx-tag">Collaboration</span><span class="vtx-tag">Security Mindset</span><span class="vtx-tag">Maintainability</span><span class="vtx-tag">Continuous Improvement</span></div></div><div class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-blue">✧</span><span class="vtx-card-number">THE VR TECH MINDSET</span></div><h3>Start with the problem. Finish with something people can use.</h3><p>We aim to make each project understandable from the first conversation through design, development, delivery, and future improvements.</p><a class="vtx-card-link" href="{{ url_for('main.services') }}">Explore our services <span>↗</span></a></div></div></section>
+
+{% endblock %}

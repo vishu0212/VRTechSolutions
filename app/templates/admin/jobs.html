@@ -1,0 +1,247 @@
+﻿{% extends "admin/base_admin.html" %}
+
+{% block title %}Job Listings | VR Tech Solutions Admin{% endblock %}
+{% block breadcrumb %}Jobs{% endblock %}
+
+{% block admin_content %}
+
+<section class="va-page-heading">
+    <div>
+        <div class="va-eyebrow">TALENT &amp; RECRUITMENT</div>
+        <h1>Job listings</h1>
+        <p>Create vacancies and keep the public Careers page up to date.</p>
+    </div>
+    <span class="va-heading-count">
+        <strong>{{ jobs|length }}</strong> listings
+    </span>
+</section>
+
+<div class="va-content-grid va-services-layout">
+
+    <section class="va-panel va-form-panel">
+        <div class="va-panel-heading">
+            <div>
+                <div class="va-eyebrow">
+                    {{ 'EDIT OPPORTUNITY' if edit_job else 'NEW OPPORTUNITY' }}
+                </div>
+                <h2>{{ 'Edit job listing' if edit_job else 'Post a job' }}</h2>
+                <p>
+                    {{ 'Update the vacancy details below.' if edit_job
+                       else 'Include the requirements and location clearly.' }}
+                </p>
+            </div>
+            <span class="va-heading-icon">
+                <i data-lucide="user-round-plus"></i>
+            </span>
+        </div>
+
+        <form method="post"
+              class="va-form"
+              action="{{ url_for('admin.job_edit', job_id=edit_job.id) if edit_job else url_for('admin.jobs') }}">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="va-field">
+                <label for="jobTitle">Job title *</label>
+                <input id="jobTitle"
+                       name="title"
+                       maxlength="150"
+                       required
+                       value="{{ edit_job.title if edit_job else '' }}"
+                       placeholder="e.g. Junior Python Developer">
+            </div>
+
+            <div class="va-form-row">
+                <div class="va-field">
+                    <label for="jobDepartment">Department</label>
+                    <input id="jobDepartment"
+                           name="department"
+                           maxlength="150"
+                           value="{{ edit_job.department or '' if edit_job else '' }}"
+                           placeholder="Engineering, AI, Design">
+                </div>
+
+                <div class="va-field">
+                    <label for="jobLocation">Location</label>
+                    <input id="jobLocation"
+                           name="location"
+                           maxlength="150"
+                           value="{{ edit_job.location or '' if edit_job else 'India' }}"
+                           placeholder="Remote / Hyderabad">
+                </div>
+            </div>
+
+            <div class="va-form-row">
+                <div class="va-field">
+                    <label for="jobType">Employment type</label>
+                    <select id="jobType" name="employment_type">
+                        {% set current_type = edit_job.employment_type if edit_job else 'Full-time' %}
+                        {% for option in ['Full-time', 'Part-time', 'Internship', 'Contract', 'Remote'] %}
+                            <option value="{{ option }}"
+                                {% if current_type == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="va-field">
+                    <label for="jobExperience">Experience</label>
+                    <input id="jobExperience"
+                           name="experience"
+                           value="{{ edit_job.experience or '' if edit_job else '' }}"
+                           placeholder="Fresher / 1-2 years">
+                </div>
+            </div>
+
+            <div class="va-form-row">
+                <div class="va-field">
+                    <label for="jobSalary">Salary range</label>
+                    <input id="jobSalary"
+                           name="salary_range"
+                           value="{{ edit_job.salary_range or '' if edit_job else '' }}"
+                           placeholder="e.g. ₹3-5 LPA">
+                </div>
+
+                <div class="va-field">
+                    <label for="jobClosingDate">Closing date</label>
+                    <input id="jobClosingDate"
+                           name="closing_date"
+                           type="date"
+                           value="{{ edit_job.closing_date.isoformat() if edit_job and edit_job.closing_date else '' }}">
+                </div>
+            </div>
+
+            <div class="va-field">
+                <label for="jobShortDescription">Short description</label>
+                <textarea id="jobShortDescription"
+                          name="short_description"
+                          rows="3"
+                          placeholder="Brief summary shown on the Careers page">{{ edit_job.short_description or '' if edit_job else '' }}</textarea>
+            </div>
+
+            <div class="va-field">
+                <label for="jobDescription">Job description *</label>
+                <textarea id="jobDescription"
+                          name="description"
+                          rows="6"
+                          required
+                          placeholder="Describe responsibilities and the role">{{ edit_job.description or '' if edit_job else '' }}</textarea>
+            </div>
+
+            <div class="va-field">
+                <label for="jobRequirements">Requirements</label>
+                <textarea id="jobRequirements"
+                          name="requirements"
+                          rows="5"
+                          placeholder="Skills, qualifications and other requirements">{{ edit_job.requirements or '' if edit_job else '' }}</textarea>
+            </div>
+
+            <label class="va-check">
+                <input type="checkbox"
+                       name="is_active"
+                       value="1"
+                       {% if edit_job %}
+                           {% if edit_job.is_active %}checked{% endif %}
+                       {% else %}
+                           checked
+                       {% endif %}>
+                <span>
+                    <strong>Accept applications</strong>
+                    <small>Show this role on the Careers page.</small>
+                </span>
+            </label>
+
+            <button type="submit" class="va-btn va-btn-primary va-btn-wide">
+                {{ 'Save changes' if edit_job else 'Publish job listing' }}
+                <i data-lucide="arrow-up-right"></i>
+            </button>
+
+            {% if edit_job %}
+                <a href="{{ url_for('admin.jobs') }}"
+                   class="va-btn va-btn-secondary va-btn-wide">
+                    Cancel editing
+                </a>
+            {% endif %}
+        </form>
+    </section>
+
+    <section class="va-panel">
+        <div class="va-panel-heading">
+            <div>
+                <div class="va-eyebrow">CURRENT LISTINGS</div>
+                <h2>Open and archived roles</h2>
+                <p>Check status and manage availability.</p>
+            </div>
+        </div>
+
+        <div class="va-manage-list">
+            {% for job in jobs %}
+                <article class="va-manage-item">
+                    <span class="va-manage-icon">
+                        <i data-lucide="briefcase"></i>
+                    </span>
+
+                    <div class="va-manage-info">
+                        <div class="va-manage-title-line">
+                            <strong>{{ job.title }}</strong>
+                            <span class="va-status-badge {{ 'va-status-active' if job.is_active else 'va-status-hidden' }}">
+                                {{ 'Open' if job.is_active else 'Closed' }}
+                            </span>
+                        </div>
+
+                        <p>
+                            {{ job.department or 'General' }} ·
+                            {{ job.location or 'Location not set' }}
+                        </p>
+
+                        <small>
+                            {{ job.employment_type or 'Employment type not set' }}
+                            {% if job.closing_date %}
+                                · Closes {{ job.closing_date.strftime('%d %b %Y') if job.closing_date.strftime is defined else job.closing_date }}
+                            {% endif %}
+                        </small>
+                    </div>
+
+                    <div class="va-row-actions">
+                        <a href="{{ url_for('admin.job_edit', job_id=job.id) }}"
+                           class="va-btn va-btn-secondary va-btn-small">
+                            Edit
+                        </a>
+
+                        <form method="post"
+                              action="{{ url_for('admin.toggle_job', item_id=job.id) }}">
+                            <input type="hidden"
+                                   name="csrf_token"
+                                   value="{{ csrf_token() }}">
+                            <button type="submit"
+                                    class="va-btn va-btn-secondary va-btn-small">
+                                {{ 'Close' if job.is_active else 'Reopen' }}
+                            </button>
+                        </form>
+
+                        <form method="post"
+                              action="{{ url_for('admin.job_delete', job_id=job.id) }}"
+                              onsubmit="return confirm('Delete this job listing? If it has applications, it will be deactivated instead and those applications will be preserved.');">
+                            <input type="hidden"
+                                   name="csrf_token"
+                                   value="{{ csrf_token() }}">
+                            <button type="submit"
+                                    class="va-btn va-btn-secondary va-btn-small">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            {% else %}
+                <div class="va-empty-state">
+                    <i data-lucide="clipboard-list"></i>
+                    <strong>No job listings</strong>
+                    <p>Post your first opportunity using the form.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Dashboard | VR Tech Solutions Admin{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block admin_content %}
+<section class="va-page-heading">
+    <div>
+        <div class="va-eyebrow">WORKSPACE OVERVIEW</div>
+        <h1>Dashboard <span class="va-heading-spark">✦</span></h1>
+        <p>Manage your website content and keep up with the latest activity.</p>
+    </div>
+
+    <div class="va-heading-date">
+        <i data-lucide="calendar-days"></i>
+        <span>{{ now.strftime('%d %b %Y') if now is defined and now else 'VR Tech workspace' }}</span>
+    </div>
+</section>
+
+<section class="va-stat-grid" aria-label="Website statistics">
+    <article class="va-stat-card va-stat-blue">
+        <div class="va-stat-top">
+            <span>Services</span>
+            <span class="va-stat-icon"><i data-lucide="layers"></i></span>
+        </div>
+        <strong>{{ service_count|default(0) }}</strong>
+        <a href="{{ url_for('admin.services') }}">
+            Manage services <i data-lucide="arrow-up-right"></i>
+        </a>
+    </article>
+
+    <article class="va-stat-card va-stat-purple">
+        <div class="va-stat-top">
+            <span>Projects</span>
+            <span class="va-stat-icon"><i data-lucide="briefcase-business"></i></span>
+        </div>
+        <strong>{{ project_count|default(0) }}</strong>
+        <a href="{{ url_for('admin.projects') }}">
+            View portfolio <i data-lucide="arrow-up-right"></i>
+        </a>
+    </article>
+
+    <article class="va-stat-card va-stat-cyan">
+        <div class="va-stat-top">
+            <span>Enquiries</span>
+            <span class="va-stat-icon"><i data-lucide="messages-square"></i></span>
+        </div>
+        <strong>{{ enquiry_count|default(0) }}</strong>
+        <a href="{{ url_for('admin.enquiries') }}">
+            Review enquiries <i data-lucide="arrow-up-right"></i>
+        </a>
+    </article>
+
+    <article class="va-stat-card va-stat-pink">
+        <div class="va-stat-top">
+            <span>New enquiries</span>
+            <span class="va-stat-icon"><i data-lucide="bell-ring"></i></span>
+        </div>
+        <strong>{{ new_enquiry_count|default(0) }}</strong>
+        <a href="{{ url_for('admin.enquiries') }}">
+            Follow up <i data-lucide="arrow-up-right"></i>
+        </a>
+    </article>
+
+    <article class="va-stat-card va-stat-green">
+        <div class="va-stat-top">
+            <span>Job listings</span>
+            <span class="va-stat-icon"><i data-lucide="clipboard-list"></i></span>
+        </div>
+        <strong>{{ job_count|default(0) }}</strong>
+        <a href="{{ url_for('admin.jobs') }}">
+            Manage jobs <i data-lucide="arrow-up-right"></i>
+        </a>
+    </article>
+
+    <article class="va-stat-card va-stat-orange">
+        <div class="va-stat-top">
+            <span>Applications</span>
+            <span class="va-stat-icon"><i data-lucide="file-user"></i></span>
+        </div>
+        <strong>{{ application_count|default(0) }}</strong>
+        <small>{{ stats.new_applications|default(0) }} new to review</small>
+        <a href="{{ url_for('admin.applications') }}">
+            Review candidates <i data-lucide="arrow-up-right"></i>
+        </a>
+    </article>
+</section>
+
+<section class="va-panel">
+    <div class="va-panel-heading">
+        <div>
+            <div class="va-eyebrow">HOMEPAGE METRICS</div>
+            <h2>Funding secured</h2>
+            <p>Update the funding figure shown on the public homepage.</p>
+        </div>
+    </div>
+    <form method="post" action="{{ url_for('admin.dashboard') }}" class="va-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="va-field">
+            <label for="fundingSecured">Funding secured display value</label>
+            <input id="fundingSecured" name="funding_secured"
+                   value="{{ funding_secured }}" maxlength="100" required
+                   placeholder="e.g. $90m or $90m+">
+            <small>Enter the figure as it should appear publicly, including currency and suffix.</small>
+        </div>
+        <button class="va-btn va-btn-primary" type="submit">Update homepage metric</button>
+    </form>
+    <p class="va-note" style="margin-top:16px">
+        The homepage Open Jobs figure is calculated from active, non-expired job listings.
+        <a href="{{ url_for('admin.jobs') }}">Manage job listings</a>
+    </p>
+</section>
+
+<section class="va-panel">
+    <div class="va-panel-heading">
+        <div>
+            <div class="va-eyebrow">TALENT &amp; RECRUITMENT</div>
+            <h2>Recent applications</h2>
+            <p>The latest candidates who submitted a job application.</p>
+        </div>
+        <a class="va-btn va-btn-secondary va-btn-small"
+           href="{{ url_for('admin.applications') }}">
+            View all <i data-lucide="arrow-up-right"></i>
+        </a>
+    </div>
+
+    <div class="va-table-wrap">
+        <table class="va-table">
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Resume</th>
+                    <th>Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for application in recent_applications %}
+                <tr>
+                    <td>
+                        <div class="va-person-cell">
+                            <span class="va-avatar">{{ application.full_name[:1]|upper }}</span>
+                            <span>
+                                <strong>{{ application.full_name }}</strong>
+                                <a href="mailto:{{ application.email }}">{{ application.email }}</a>
+                            </span>
+                        </div>
+                    </td>
+                    <td>{{ application.job.title if application.job else 'Role unavailable' }}</td>
+                    <td>
+                        <span class="va-status-badge va-status-{{ application.status|lower|replace(' ', '-') }}">
+                            {{ application.status|title }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if application.resume_filename %}
+                        <a class="va-btn va-btn-secondary va-btn-small"
+                           href="{{ url_for('admin.application_resume', application_id=application.id) }}"
+                           target="_blank" rel="noopener">
+                            Open resume <i data-lucide="arrow-up-right"></i>
+                        </a>
+                        {% else %}
+                        <span>Not available</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ application.created_at.strftime('%d %b %Y') if application.created_at else '—' }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">
+                        <div class="va-table-empty">
+                            <i data-lucide="file-user"></i>
+                            <strong>No applications yet</strong>
+                            <span>New job applications will appear here.</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="va-panel">
+    <div class="va-panel-heading">
+        <div>
+            <div class="va-eyebrow">RECENT ACTIVITY</div>
+            <h2>Latest enquiries</h2>
+            <p>Recently received messages from your website.</p>
+        </div>
+        <a class="va-btn va-btn-secondary va-btn-small"
+           href="{{ url_for('admin.enquiries') }}">
+            View all <i data-lucide="arrow-up-right"></i>
+        </a>
+    </div>
+
+    <div class="va-table-wrap">
+        <table class="va-table">
+            <thead>
+                <tr>
+                    <th>Contact</th>
+                    <th>Topic</th>
+                    <th>Status</th>
+                    <th>Received</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for item in (recent_enquiries|default([], true)) %}
+                <tr>
+                    <td>
+                        <div class="va-person-cell">
+                            <span class="va-avatar">
+                                {{ (item.name|default(item.full_name|default('V', true), true))[:1]|upper }}
+                            </span>
+                            <span>
+                                <strong>{{ item.name|default(item.full_name|default('Website visitor', true), true) }}</strong>
+                                <small>{{ item.email|default('—', true) }}</small>
+                            </span>
+                        </div>
+                    </td>
+                    <td>{{ item.subject|default(item.service_required|default('General enquiry', true), true) }}</td>
+                    <td>
+                        <span class="va-status-badge va-status-{{ item.status|default('new', true)|lower|replace(' ', '-') }}">
+                            {{ item.status|default('New', true) }}
+                        </span>
+                    </td>
+                    <td>{{ item.created_at.strftime('%d %b %Y') if item.created_at is defined and item.created_at else '—' }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">
+                        <div class="va-table-empty">
+                            <i data-lucide="inbox"></i>
+                            <strong>No enquiries yet</strong>
+                            <span>New website enquiries will appear here.</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="va-quick-actions">
+    <div class="va-quick-copy">
+        <div class="va-eyebrow">QUICK ACTIONS</div>
+        <h2>Keep your website current.</h2>
+        <p>Jump straight to common content-management tasks.</p>
+    </div>
+
+    <div class="va-quick-buttons">
+        <a href="{{ url_for('admin.services') }}">
+            <i data-lucide="plus"></i>
+            <span>Manage services</span>
+            <i data-lucide="arrow-up-right"></i>
+        </a>
+        <a href="{{ url_for('admin.projects') }}">
+            <i data-lucide="folder-plus"></i>
+            <span>Manage projects</span>
+            <i data-lucide="arrow-up-right"></i>
+        </a>
+        <a href="{{ url_for('admin.jobs') }}">
+            <i data-lucide="user-plus"></i>
+            <span>Post a job</span>
+            <i data-lucide="arrow-up-right"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

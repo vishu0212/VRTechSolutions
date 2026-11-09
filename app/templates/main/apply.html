@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}Apply for an Opportunity | VR Tech Solutions{% endblock %}
+
+{% block meta_description %}
+Submit your profile and resume to VR Tech Solutions for consideration for software, AI, automation, cloud, or design opportunities.
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/vtx-apply-search.css') }}">
+{% endblock %}
+
+{% block content %}
+{% set selected_role = request.args.get('role', request.args.get('position', '')) %}
+{% set selected_job_id = request.args.get('job_id', '') %}
+
+<section class="vtx-as-hero">
+    <div class="vtx-as-hero-glow vtx-as-glow-one"></div>
+    <div class="vtx-as-hero-glow vtx-as-glow-two"></div>
+
+    <div class="vtx-container">
+        <div class="vtx-as-hero-inner">
+            <div class="vtx-kicker">
+                <span class="vtx-kicker-dot"></span>
+                CAREERS / YOUR NEXT CHAPTER
+            </div>
+
+            <h1>
+                Bring your curiosity.<br>
+                <span class="vtx-gradient-text">Build what’s next.</span>
+            </h1>
+
+            <p class="vtx-lead">
+                Tell us about your interests, experience, and the kind of
+                problems you want to solve. Share your profile for consideration
+                when a suitable opportunity is available.
+            </p>
+
+            <div class="vtx-as-steps" aria-label="Application steps">
+                <div>
+                    <span>01</span>
+                    <strong>Your details</strong>
+                </div>
+                <i></i>
+                <div>
+                    <span>02</span>
+                    <strong>Your experience</strong>
+                </div>
+                <i></i>
+                <div>
+                    <span>03</span>
+                    <strong>Submit profile</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="vtx-section vtx-as-application-section">
+    <div class="vtx-container vtx-as-application-layout">
+
+        <aside class="vtx-as-application-sidebar">
+            <div class="vtx-as-sidebar-orb">
+                <span>VR</span>
+            </div>
+
+            <div class="vtx-kicker">APPLICATION PROFILE</div>
+
+            <h2>Make your introduction count.</h2>
+
+            <p>
+                Keep your details clear and highlight the work that best
+                demonstrates your skills.
+            </p>
+
+            <div class="vtx-as-checklist">
+                <div>
+                    <span>✓</span>
+                    <p>
+                        <strong>Relevant projects</strong>
+                        <small>Include practical work, coursework, or a portfolio.</small>
+                    </p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>
+                        <strong>Clear skills</strong>
+                        <small>List tools and technologies you have actually used.</small>
+                    </p>
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    <p>
+                        <strong>Accurate details</strong>
+                        <small>Provide contact details you can access.</small>
+                    </p>
+                </div>
+            </div>
+
+            <div class="vtx-as-privacy-note">
+                <i data-lucide="shield-check"></i>
+                <span>
+                    Do not upload passwords, government ID numbers, or
+                    unrelated sensitive information.
+                </span>
+            </div>
+        </aside>
+
+        <div class="vtx-as-form-card">
+            <div class="vtx-as-form-heading">
+                <div>
+                    <div class="vtx-kicker">APPLICATION FORM</div>
+                    <h2>Your details</h2>
+                    <p>Fields marked with <span>*</span> are required.</p>
+                </div>
+
+                <div class="vtx-as-form-icon">
+                    <i data-lucide="file-user"></i>
+                </div>
+            </div>
+
+            <form class="vtx-as-form"
+                  id="vtxApplyForm"
+                  method="post"
+                  action="{{ request.url }}"
+                  enctype="multipart/form-data">
+
+                <input type="hidden"
+                       name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                {% if selected_job_id %}
+                <input type="hidden"
+                       name="job_id"
+                       value="{{ selected_job_id }}">
+                {% endif %}
+
+                <div class="vtx-as-form-grid">
+
+                    <div class="vtx-as-field">
+                        <label for="applyName">
+                            Full name <span>*</span>
+                        </label>
+                        <input id="applyName"
+                               name="name"
+                               type="text"
+                               autocomplete="name"
+                               placeholder="Enter your full name"
+                               required
+                               maxlength="120"
+                               value="{{ request.form.get('name', '') }}">
+                    </div>
+
+                    <div class="vtx-as-field">
+                        <label for="applyEmail">
+                            Email address <span>*</span>
+                        </label>
+                        <input id="applyEmail"
+                               name="email"
+                               type="email"
+                               autocomplete="email"
+                               placeholder="you@example.com"
+                               required
+                               maxlength="254"
+                               value="{{ request.form.get('email', '') }}">
+                    </div>
+
+                    <div class="vtx-as-field">
+                        <label for="applyPhone">Phone number</label>
+                        <input id="applyPhone"
+                               name="phone"
+                               type="tel"
+                               autocomplete="tel"
+                               placeholder="Your contact number"
+                               maxlength="30"
+                               value="{{ request.form.get('phone', '') }}">
+                    </div>
+
+                    <div class="vtx-as-field">
+                        <label for="applyLocation">Current location</label>
+                        <input id="applyLocation"
+                               name="location"
+                               type="text"
+                               autocomplete="address-level2"
+                               placeholder="City, state"
+                               maxlength="120"
+                               value="{{ request.form.get('location', '') }}">
+                    </div>
+
+                    <div class="vtx-as-field vtx-as-field-full">
+                        <label for="applyRole">
+                            Position
+                        </label>
+
+                        {% if job %}
+                        <input id="applyRole"
+                               type="text"
+                               value="{{ job.title }}"
+                               readonly>
+                        {% else %}
+                        <select id="applyRole" name="position" required>
+                            <option value=""
+                                {% if not selected_role %}selected{% endif %}
+                                disabled>
+                                Select an area
+                            </option>
+
+                            {% for role in [
+                                'Python / Backend Developer',
+                                '.NET Developer',
+                                'Frontend Developer',
+                                'AI / Machine Learning',
+                                'AI Automation',
+                                'Cloud & Data',
+                                'UI / UX Design',
+                                'Internship / Graduate Opportunity',
+                                'Other'
+                            ] %}
+                            <option value="{{ role }}"
+                                {% if selected_role|lower == role|lower
+                                    or request.form.get('position', '')|lower == role|lower %}
+                                    selected
+                                {% endif %}>
+                                {{ role }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% endif %}
+                    </div>
+
+                    <div class="vtx-as-field vtx-as-field-full">
+                        <label for="applySkills">Key skills</label>
+                        <input id="applySkills"
+                               name="skills"
+                               type="text"
+                               placeholder="e.g. Python, Flask, SQL, JavaScript"
+                               maxlength="500"
+                               value="{{ request.form.get('skills', '') }}">
+                        <small>List a few relevant tools or technologies.</small>
+                    </div>
+
+                    <div class="vtx-as-field vtx-as-field-full">
+                        <label for="applyResume">
+                            Resume / CV <span>*</span>
+                        </label>
+
+                        <label class="vtx-as-upload"
+                               for="applyResume"
+                               id="vtxResumeDrop">
+
+                            <span class="vtx-as-upload-icon">
+                                <i data-lucide="upload-cloud"></i>
+                            </span>
+
+                            <span class="vtx-as-upload-copy">
+                                <strong id="vtxResumeFileName">
+                                    Choose your resume
+                                </strong>
+                                <small>PDF, DOC, or DOCX · up to 5 MB</small>
+                            </span>
+
+                            <span class="vtx-as-upload-action">Browse</span>
+                        </label>
+
+                        <input class="vtx-as-file-input"
+                               id="applyResume"
+                               name="resume"
+                               type="file"
+                               accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                               required>
+
+                        <small id="vtxResumeError"
+                               class="vtx-as-field-error"
+                               aria-live="polite"></small>
+                    </div>
+
+                    <div class="vtx-as-field vtx-as-field-full">
+                        <label for="applyPortfolio">
+                            Portfolio / LinkedIn URL
+                        </label>
+                        <input id="applyPortfolio"
+                               name="portfolio_url"
+                               type="url"
+                               placeholder="https://..."
+                               maxlength="500"
+                               value="{{ request.form.get('portfolio_url', '') }}">
+                    </div>
+
+                    <div class="vtx-as-field vtx-as-field-full">
+                        <label for="applyCoverLetter">Brief introduction</label>
+
+                        <textarea id="applyCoverLetter"
+                                  name="cover_letter"
+                                  rows="5"
+                                  maxlength="3000"
+                                  placeholder="Tell us about your interests, relevant projects, or what you would like to learn.">{{ request.form.get('cover_letter', '') }}</textarea>
+
+                        <div class="vtx-as-character-count">
+                            <span id="vtxCoverCount">0</span> / 3000
+                        </div>
+                    </div>
+                </div>
+
+                <label class="vtx-as-consent">
+                    <input type="checkbox"
+                           name="consent"
+                           value="yes"
+                           required>
+                    <span>
+                        I confirm that the information I provided is accurate
+                        and may be used to respond to this application.
+                        <b>*</b>
+                    </span>
+                </label>
+
+                <button class="vtx-button vtx-button-primary vtx-as-submit"
+                        type="submit">
+                    Submit application <span>↗</span>
+                </button>
+
+                <p class="vtx-as-form-footnote">
+                    Submitting this form does not guarantee an interview or
+                    job offer. Please upload only a resume you are comfortable
+                    sharing for recruitment purposes.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/vtx-apply-search.js') }}" defer></script>
+{% endblock %}

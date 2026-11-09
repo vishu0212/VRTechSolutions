@@ -1,0 +1,97 @@
+﻿{% extends "admin/base_admin.html" %}
+
+{% block title %}Edit Project | VR Tech Solutions Admin{% endblock %}
+{% block breadcrumb %}Edit Project{% endblock %}
+
+{% block admin_content %}
+<section class="va-page-heading">
+    <div>
+        <div class="va-eyebrow">PORTFOLIO MANAGEMENT</div>
+        <h1>Edit project</h1>
+        <p>Update project information and website visibility.</p>
+    </div>
+    <a href="{{ url_for('admin.projects') }}" class="va-btn va-btn-secondary">
+        Back to projects
+    </a>
+</section>
+
+<section class="va-panel va-form-panel">
+    <form method="post" class="va-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="va-field">
+            <label for="projectTitle">Project title *</label>
+            <input id="projectTitle" name="title" maxlength="150"
+                   value="{{ item.title or '' }}" required>
+        </div>
+
+        <div class="va-form-row">
+            <div class="va-field">
+                <label for="projectCategory">Category</label>
+                <input id="projectCategory" name="category" maxlength="100"
+                       value="{{ item.category or '' }}">
+            </div>
+            <div class="va-field">
+                <label for="projectOrder">Display order</label>
+                <input id="projectOrder" name="display_order" type="number"
+                       min="0" max="9999" value="{{ item.display_order or 0 }}">
+            </div>
+        </div>
+
+        <div class="va-field">
+            <label for="projectShortDescription">Short description</label>
+            <textarea id="projectShortDescription" name="short_description"
+                      rows="3" maxlength="300">{{ item.short_description or '' }}</textarea>
+        </div>
+
+        <div class="va-field">
+            <label for="projectDescription">Full description</label>
+            <textarea id="projectDescription" name="description"
+                      rows="6">{{ item.description or '' }}</textarea>
+        </div>
+
+        <div class="va-field">
+            <label for="projectTechnologies">Technologies</label>
+            <input id="projectTechnologies" name="technologies"
+                   maxlength="500" value="{{ item.technologies or '' }}"
+                   placeholder="Python, Flask, MySQL">
+        </div>
+
+        <div class="va-field">
+            <label for="projectImageUrl">Project image URL</label>
+            <input id="projectImageUrl" name="image_url" type="url"
+                   maxlength="500" value="{{ item.image_url or '' }}"
+                   placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="va-field">
+            <label for="projectUrl">Project URL</label>
+            <input id="projectUrl" name="project_url" type="url"
+                   maxlength="500" value="{{ item.project_url or '' }}"
+                   placeholder="https://example.com">
+        </div>
+
+        <div class="va-form-row">
+            <label class="va-check">
+                <input type="checkbox" name="is_active"
+                       {% if item.is_active %}checked{% endif %}>
+                <span><strong>Active</strong><small>Visible on the website.</small></span>
+            </label>
+
+            <label class="va-check">
+                <input type="checkbox" name="is_featured"
+                       {% if item.is_featured %}checked{% endif %}>
+                <span><strong>Featured</strong><small>Highlight on homepage.</small></span>
+            </label>
+        </div>
+
+        <div class="va-form-row">
+            <button type="submit" class="va-btn va-btn-primary">
+                Save changes
+            </button>
+            <a href="{{ url_for('admin.projects') }}"
+               class="va-btn va-btn-secondary">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

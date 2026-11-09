@@ -1,0 +1,612 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Applications | VR Tech Solutions Admin{% endblock %}
+{% block breadcrumb %}Applications{% endblock %}
+
+{% block admin_content %}
+
+<style>
+    .va-applications-page {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .va-applications-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .va-applications-heading h1 {
+        margin: 5px 0 8px;
+        font-size: clamp(25px, 3vw, 34px);
+        font-weight: 750;
+        letter-spacing: -1px;
+    }
+
+    .va-applications-heading p,
+    .va-applications-panel-heading p {
+        margin: 0;
+        color: var(--va-muted, #64748b);
+        font-size: 13px;
+    }
+
+    .va-applications-total {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 18px;
+        border: 1px solid var(--va-border, #e2e8f0);
+        border-radius: 14px;
+        background: var(--va-surface, #fff);
+    }
+
+    .va-applications-total-icon {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .va-applications-total strong {
+        display: block;
+        font-size: 23px;
+        line-height: 1.2;
+    }
+
+    .va-applications-total span {
+        color: var(--va-muted, #64748b);
+        font-size: 11px;
+    }
+
+    .va-applications-panel {
+        overflow: hidden;
+    }
+
+    .va-applications-panel-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        padding: 22px 24px;
+        border-bottom: 1px solid var(--va-border, #e2e8f0);
+    }
+
+    .va-applications-panel-heading h2 {
+        margin: 5px 0 7px;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .va-applications-search {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .va-applications-search input,
+    .va-applications-search select {
+        min-height: 39px;
+        border: 1px solid var(--va-border, #e2e8f0);
+        border-radius: 9px;
+        padding: 0 12px;
+        background: var(--va-surface, #fff);
+        color: inherit;
+        font-size: 12px;
+        outline: none;
+    }
+
+    .va-applications-search input {
+        min-width: 210px;
+    }
+
+    .va-applications-search input:focus,
+    .va-applications-search select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, .10);
+    }
+
+    .va-applications-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .va-applications-table {
+        width: 100%;
+        min-width: 1050px;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .va-applications-table thead th {
+        padding: 13px 17px;
+        background: var(--va-table-header, #f8fafc);
+        color: var(--va-muted, #64748b);
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .va-applications-table tbody td {
+        padding: 17px;
+        border-bottom: 1px solid var(--va-border, #e2e8f0);
+        vertical-align: middle;
+        font-size: 12px;
+    }
+
+    .va-applications-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .va-applications-table tbody tr:hover {
+        background: var(--va-hover, #f8fafc);
+    }
+
+    .va-candidate {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 200px;
+    }
+
+    .va-candidate-avatar {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 12px;
+        background: #eaf1ff;
+        color: #2457a7;
+        font-size: 15px;
+        font-weight: 750;
+        text-transform: uppercase;
+    }
+
+    .va-candidate-info,
+    .va-job-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        min-width: 0;
+    }
+
+    .va-candidate-info strong,
+    .va-job-info strong {
+        color: var(--va-text, #172033);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .va-candidate-info a {
+        color: #3976c8;
+        font-size: 11px;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+    }
+
+    .va-candidate-info a:hover {
+        text-decoration: underline;
+    }
+
+    .va-candidate-info small,
+    .va-job-info small {
+        color: var(--va-muted, #64748b);
+        font-size: 10px;
+    }
+
+    .va-resume-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+
+    .va-status-form {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .va-status-form select {
+        min-width: 112px;
+        min-height: 34px;
+        padding: 0 8px;
+        border: 1px solid var(--va-border, #e2e8f0);
+        border-radius: 8px;
+        background: var(--va-surface, #fff);
+        color: inherit;
+        font-size: 11px;
+    }
+
+    .va-submitted-date {
+        color: var(--va-muted, #64748b);
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .va-delete-form {
+        margin: 0;
+    }
+
+    .va-delete-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 33px;
+        padding: 0 10px;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        background: #fff1f2;
+        color: #be123c;
+        font-size: 11px;
+        font-weight: 650;
+        cursor: pointer;
+        transition: background .2s ease, border-color .2s ease;
+    }
+
+    .va-delete-btn:hover {
+        background: #ffe4e6;
+        border-color: #fda4af;
+    }
+
+    .va-delete-btn:focus-visible {
+        outline: 3px solid rgba(225, 29, 72, .2);
+        outline-offset: 2px;
+    }
+
+    .va-cover-letter-row td {
+        padding-top: 0 !important;
+        background: var(--va-hover, #f8fafc);
+    }
+
+    .va-cover-letter {
+        padding: 12px 15px;
+        border-left: 3px solid #93b5e8;
+        border-radius: 0 8px 8px 0;
+        background: var(--va-surface, #fff);
+        color: var(--va-muted, #64748b);
+        font-size: 11px;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+    }
+
+    .va-cover-letter strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--va-text, #172033);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    .va-applications-empty {
+        padding: 65px 20px !important;
+        text-align: center;
+    }
+
+    .va-applications-empty i {
+        display: block;
+        margin: 0 auto 14px;
+        color: #94a3b8;
+        font-size: 32px;
+    }
+
+    .va-applications-empty strong,
+    .va-applications-empty span {
+        display: block;
+    }
+
+    .va-applications-empty strong {
+        margin-bottom: 6px;
+        font-size: 14px;
+    }
+
+    .va-applications-empty span {
+        color: var(--va-muted, #64748b);
+        font-size: 12px;
+    }
+
+    @media (max-width: 700px) {
+        .va-applications-heading {
+            align-items: flex-start;
+        }
+
+        .va-applications-total {
+            width: 100%;
+        }
+
+        .va-applications-panel-heading {
+            align-items: flex-start;
+            padding: 18px;
+        }
+
+        .va-applications-search {
+            width: 100%;
+        }
+
+        .va-applications-search input {
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .va-applications-search select {
+            flex: 1;
+        }
+    }
+</style>
+
+<div class="va-applications-page">
+
+    <!-- Page heading -->
+    <section class="va-applications-heading">
+        <div>
+            <div class="va-eyebrow">TALENT &amp; RECRUITMENT</div>
+            <h1>Applications</h1>
+            <p>Manage candidates, review resumes and track recruitment progress.</p>
+        </div>
+
+        <div class="va-applications-total">
+            <div class="va-applications-total-icon">
+                <i data-lucide="users"></i>
+            </div>
+            <div>
+                <strong>{{ applications|length }}</strong>
+                <span>Applications found</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications panel -->
+    <section class="va-panel va-applications-panel">
+
+        <div class="va-applications-panel-heading">
+            <div>
+                <div class="va-eyebrow">CANDIDATE MANAGEMENT</div>
+                <h2>Job applications</h2>
+                <p>Review candidate details and update application status.</p>
+            </div>
+
+            <!-- Search and filter -->
+            <form
+                class="va-applications-search"
+                method="get"
+                action="{{ url_for('admin.applications') }}"
+            >
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ search }}"
+                    placeholder="Search candidates..."
+                    aria-label="Search candidates"
+                >
+
+                <select name="status" aria-label="Filter by status">
+                    <option value="">All statuses</option>
+
+                    {% for value, label in [
+                        ('new', 'New'),
+                        ('reviewing', 'Reviewing'),
+                        ('shortlisted', 'Shortlisted'),
+                        ('rejected', 'Rejected'),
+                        ('hired', 'Hired')
+                    ] %}
+                    <option
+                        value="{{ value }}"
+                        {% if selected_status == value %}selected{% endif %}
+                    >
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <button
+                    class="va-btn va-btn-secondary va-btn-small"
+                    type="submit"
+                >
+                    <i data-lucide="filter"></i>
+                    Filter
+                </button>
+            </form>
+        </div>
+
+        <!-- Candidate table -->
+        <div class="va-applications-table-wrap">
+            <table class="va-applications-table">
+
+                <thead>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Resume</th>
+                        <th>Application status</th>
+                        <th>Submitted</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for application in applications %}
+
+                    {% set resume_extension =
+                        application.resume_filename.rsplit('.', 1)[-1]|lower
+                        if application.resume_filename and '.' in application.resume_filename
+                        else ''
+                    %}
+
+                    <tr>
+                        <!-- Candidate details -->
+                        <td>
+                            <div class="va-candidate">
+                                <div class="va-candidate-avatar">
+                                    {{ application.full_name[:1]|upper if application.full_name else '?' }}
+                                </div>
+
+                                <div class="va-candidate-info">
+                                    <strong>
+                                        {{ application.full_name or 'Unknown candidate' }}
+                                    </strong>
+
+                                    {% if application.email %}
+                                    <a href="mailto:{{ application.email }}">
+                                        {{ application.email }}
+                                    </a>
+                                    {% endif %}
+
+                                    {% if application.phone %}
+                                    <small>{{ application.phone }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Job details -->
+                        <td>
+                            <div class="va-job-info">
+                                <strong>
+                                    {{ application.job.title if application.job else 'Role unavailable' }}
+                                </strong>
+
+                                {% if application.experience %}
+                                <small>{{ application.experience }}</small>
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <!-- Resume -->
+                        <td>
+                            {% if application.resume_filename %}
+                            <a
+                                class="va-btn va-btn-secondary va-btn-small va-resume-link"
+                                href="{{ url_for('admin.application_resume', application_id=application.id) }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <i data-lucide="file-text"></i>
+                                {{ 'View PDF' if resume_extension == 'pdf' else 'Open resume' }}
+                            </a>
+                            {% else %}
+                            <span class="va-submitted-date">Not available</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Application status -->
+                        <td>
+                            <form
+                                method="post"
+                                action="{{ url_for('admin.application_update', application_id=application.id) }}"
+                                class="va-status-form"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <select
+                                    name="status"
+                                    aria-label="Update application status"
+                                >
+                                    {% for value, label in [
+                                        ('new', 'New'),
+                                        ('reviewing', 'Reviewing'),
+                                        ('shortlisted', 'Shortlisted'),
+                                        ('rejected', 'Rejected'),
+                                        ('hired', 'Hired')
+                                    ] %}
+                                    <option
+                                        value="{{ value }}"
+                                        {% if application.status == value %}selected{% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+
+                                <button
+                                    class="va-btn va-btn-secondary va-btn-small"
+                                    type="submit"
+                                >
+                                    Save
+                                </button>
+                            </form>
+                        </td>
+
+                        <!-- Submission date -->
+                        <td>
+                            <span class="va-submitted-date">
+                                {{ application.created_at.strftime('%d %b %Y') if application.created_at else '—' }}
+                            </span>
+                        </td>
+
+                        <!-- Delete applicant -->
+                        <td>
+                            <form
+                                method="post"
+                                action="{{ url_for('admin.application_delete', application_id=application.id) }}"
+                                class="va-delete-form"
+                                onsubmit="return confirm('Permanently delete this applicant and their application? This action cannot be undone.');"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="va-delete-btn"
+                                    aria-label="Delete {{ application.full_name or 'applicant' }}"
+                                    title="Delete applicant"
+                                >
+                                    <i data-lucide="trash-2"></i>
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <!-- Cover letter -->
+                    {% if application.cover_letter %}
+                    <tr class="va-cover-letter-row">
+                        <td colspan="6">
+                            <div class="va-cover-letter">
+                                <strong>Cover letter</strong>
+                                {{ application.cover_letter }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="va-applications-empty">
+                            <i data-lucide="file-user"></i>
+                            <strong>No applications found</strong>
+                            <span>Submitted applications will appear here.</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </section>
+</div>
+
+{% endblock %}

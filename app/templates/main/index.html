@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VR Tech Solutions — Empowering Tomorrow's Innovations</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ==========================================================================
+           DUAL-MODE DESIGN SYSTEM TOKENS (CRYSTAL AIRY LIGHT vs NEON OBSIDIAN DARK)
+           ========================================================================== */
+        :root, [data-theme="light"] {
+            --bg-page: #F2F5FF;
+            --bg-gradient-1: rgba(99, 102, 241, 0.13);
+            --bg-gradient-2: rgba(217, 70, 239, 0.11);
+            --bg-gradient-3: rgba(0, 240, 255, 0.12);
+            --glass-nav: rgba(255, 255, 255, 0.84);
+            --glass-card: rgba(255, 255, 255, 0.78);
+            --glass-card-hover: rgba(255, 255, 255, 0.96);
+            --glass-pill: rgba(255, 255, 255, 0.88);
+            --glass-border: rgba(255, 255, 255, 0.95);
+            --subtle-border: rgba(148, 163, 184, 0.22);
+            --text-main: #090D16;
+            --text-secondary: #526077;
+            --text-muted: #7C8BA1;
+            --logo-tech-color: #0B1120;
+            --logo-sub-color: #475569;
+            --card-shadow: 0 20px 50px -12px rgba(30, 41, 59, 0.08), 0 4px 16px -2px rgba(59, 130, 246, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+            --node-shadow: 0 18px 38px -8px rgba(30, 58, 138, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.95);
+            --pedestal-glow: rgba(56, 189, 248, 0.25);
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #050711;
+            --bg-gradient-1: rgba(37, 99, 235, 0.22);
+            --bg-gradient-2: rgba(217, 70, 239, 0.18);
+            --bg-gradient-3: rgba(0, 240, 255, 0.15);
+            --glass-nav: rgba(12, 17, 34, 0.82);
+            --glass-card: rgba(15, 22, 42, 0.74);
+            --glass-card-hover: rgba(22, 31, 58, 0.92);
+            --glass-pill: rgba(19, 28, 52, 0.88);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --subtle-border: rgba(148, 163, 184, 0.16);
+            --text-main: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --logo-tech-color: #FFFFFF;
+            --logo-sub-color: #CBD5E1;
+            --card-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(0, 240, 255, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+            --node-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.75), 0 0 20px rgba(59, 130, 246, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            --pedestal-glow: rgba(0, 240, 255, 0.45);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Luminous Mesh Background */
+        .ambient-canvas-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(circle 650px at 72% 42%, var(--bg-gradient-1), transparent 70%),
+                radial-gradient(circle 550px at 82% 28%, var(--bg-gradient-2), transparent 70%),
+                radial-gradient(circle 600px at 62% 58%, var(--bg-gradient-3), transparent 70%),
+                radial-gradient(circle 500px at 15% 25%, rgba(59, 130, 246, 0.08), transparent 65%);
+            transition: background 0.5s ease;
+        }
+
+        /* Frosted Glass Navbar & Cards */
+        .glass-navbar {
+            background: var(--glass-nav);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .glass-pill-badge {
+            background: var(--glass-pill);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 24px -6px rgba(59, 130, 246, 0.12);
+        }
+
+        .satellite-node-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: var(--node-shadow);
+            transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .satellite-node-card:hover,
+        .satellite-node-card.active-node {
+            background: var(--glass-card-hover);
+            transform: translateY(-5px) scale(1.03);
+            border-color: #38BDF8;
+            box-shadow: 0 24px 48px -10px rgba(37, 99, 235, 0.25), 0 0 0 2px rgba(56, 189, 248, 0.35);
+        }
+
+        .service-bottom-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .service-bottom-card:hover,
+        .service-bottom-card.active-service {
+            background: var(--glass-card-hover);
+            transform: translateY(-6px);
+            border-color: #6366F1;
+            box-shadow: 0 28px 55px -12px rgba(79, 70, 229, 0.22), 0 0 0 1.5px rgba(99, 102, 241, 0.35);
+        }
+
+        /* Signature Headline Gradient ("Tomorrow's") */
+        .headline-gradient {
+            background: linear-gradient(92deg, #1D4ED8 0%, #3B82F6 32%, #8B5CF6 68%, #D946EF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-theme="dark"] .headline-gradient {
+            background: linear-gradient(92deg, #38BDF8 0%, #60A5FA 32%, #A855F7 68%, #F472B6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navbar Launch Button & Hero Primary CTA */
+        .btn-nav-launch {
+            background: linear-gradient(95deg, #1E40AF 0%, #3B82F6 45%, #9333EA 85%, #C026D3 100%);
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+            transition: all 0.25s ease;
+        }
+        .btn-nav-launch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px -4px rgba(147, 51, 234, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            filter: brightness(1.06);
+        }
+
+        .btn-hero-launch {
+            background: linear-gradient(95deg, #06122E 0%, #0F265C 40%, #2563EB 80%, #9333EA 100%);
+            box-shadow: 0 16px 36px -6px rgba(37, 99, 235, 0.5), 0 0 18px rgba(56, 189, 248, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-hero-launch:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 20px 42px -6px rgba(147, 51, 234, 0.55), 0 0 25px rgba(0, 240, 255, 0.55);
+        }
+
+        /* Floating Orbit Animations for Satellite Nodes & Spheres */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-7px); }
+        }
+        @keyframes floatSlowReverse {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(7px); }
+        }
+        .animate-float-1 { animation: floatSlow 5.5s ease-in-out infinite; }
+        .animate-float-2 { animation: floatSlowReverse 6.2s ease-in-out infinite; }
+        .animate-float-3 { animation: floatSlow 4.8s ease-in-out infinite 1s; }
+
+        /* Holographic Emitter Base Pedestal */
+        .hologram-pedestal {
+            position: relative;
+            width: 390px;
+            max-width: 90%;
+            height: 62px;
+            margin: -28px auto 0;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.55) 0%, rgba(59, 130, 246, 0.3) 38%, rgba(168, 85, 247, 0.15) 65%, transparent 80%);
+            box-shadow: 0 12px 45px 8px var(--pedestal-glow);
+            transform: rotateX(68deg);
+            pointer-events: none;
+        }
+        .hologram-pedestal::before {
+            content: '';
+            position: absolute;
+            inset: 8px 24px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 240, 255, 0.75);
+            box-shadow: 0 0 22px #00F0FF, inset 0 0 18px #38BDF8;
+        }
+        .hologram-pedestal::after {
+            content: '';
+            position: absolute;
+            inset: -8px -18px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(192, 132, 252, 0.45);
+        }
+        .home-footer {
+            position: relative;
+            overflow: hidden;
+            color: #e7edf8;
+            background: radial-gradient(ellipse at 12% 0%, rgba(37,99,235,.2), transparent 38%), linear-gradient(135deg,#07101f,#0b1428 58%,#10152d);
+        }
+        .home-footer::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            content: '';
+            background: linear-gradient(90deg,#22d3ee,#6366f1 52%,#c026d3);
+        }
+        .home-footer-grid {
+            display: grid;
+            grid-template-columns: minmax(250px,1.5fr) minmax(200px,1fr);
+            align-items: center;
+            gap: 48px;
+        }
+        .home-footer-heading {
+            margin: 3px 0 16px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .home-footer-socials { display: flex; justify-content: flex-end; gap: 11px; }
+        .home-footer-social {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(148,163,184,.24);
+            border-radius: 13px;
+            color: #c3cee0;
+            background: rgba(255,255,255,.045);
+        }
+        .home-footer-social svg {
+            width: 19px;
+            height: 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .home-footer-social .home-social-fill,
+        .home-footer-social .home-social-dot { fill: currentColor; stroke: none; }
+        .home-footer-legal { display: flex; flex-wrap: wrap; gap: 20px; }
+        .home-footer-legal a { color: #9baac2; }
+        .home-footer-legal a:hover { color: #fff; }
+        .home-mobile-nav {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            left: 0;
+            z-index: 60;
+            display: none;
+            flex-direction: column;
+            padding: 10px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            background: var(--glass-nav);
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .home-mobile-nav.is-open { display: flex; }
+        .home-mobile-nav a {
+            padding: 13px 10px;
+            border-bottom: 1px solid var(--subtle-border);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .home-mobile-nav a:last-child { border-bottom: 0; }
+        .home-menu-toggle {
+            display: none;
+            width: 38px;
+            height: 38px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--subtle-border);
+            border-radius: 12px;
+            background: var(--glass-pill);
+            color: var(--text-main);
+        }
+        .home-menu-toggle svg { width: 18px; height: 18px; }
+        @media (max-width: 1535px) {
+            .home-menu-toggle { display: inline-flex; }
+        }
+        @media (max-width: 800px) {
+            .home-footer-grid { grid-template-columns: minmax(0,1fr) auto; gap: 30px; }
+        }
+        @media (max-width: 580px) {
+            .home-footer-grid { grid-template-columns: 1fr; gap: 28px; }
+            .home-footer-socials { justify-content: flex-start; }
+            .home-footer-legal { gap: 15px; }
+        }
+        @media (max-width: 480px) {
+            .home-footer-legal { font-size: 10px; }
+        }
+
+        #home {
+            width: 100%;
+        }
+        #orbStageContainer {
+            min-width: 0;
+        }
+        .home-impact-metrics > div {
+            min-width: 0;
+        }
+        .home-impact-metrics .home-impact-divider {
+            flex: 0 0 1.5px;
+        }
+        #launchModal,
+        #videoModal {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+        #launchModal > div,
+        #videoModal > div {
+            max-height: calc(100vh - 2rem);
+            max-height: calc(100dvh - 2rem);
+            overflow-y: auto;
+        }
+        @media (max-width: 639px) {
+            header.sticky {
+                top: .5rem;
+                padding-inline: .75rem;
+            }
+            header.sticky > div.glass-navbar {
+                gap: .5rem;
+                padding: .55rem .7rem;
+                border-radius: 15px;
+            }
+            header.sticky > div.glass-navbar > a {
+                gap: .45rem;
+            }
+            header.sticky > div.glass-navbar > a > div:first-child {
+                width: 3.1rem;
+                height: 2.3rem;
+            }
+            header.sticky > div.glass-navbar > a .text-xl {
+                font-size: 1.05rem;
+            }
+            header.sticky > div.glass-navbar > a .tracking-\[0\.28em\] {
+                font-size: .5rem;
+            }
+            header.sticky > div.glass-navbar > div {
+                gap: .35rem;
+            }
+            header.sticky > div.glass-navbar > div > button {
+                width: 2.15rem;
+                height: 2.15rem;
+                padding: 0;
+                justify-content: center;
+            }
+            .home-menu-toggle {
+                width: 2.15rem;
+                height: 2.15rem;
+            }
+            #home {
+                padding-top: 1.5rem;
+            }
+            #home h1 {
+                font-size: clamp(2.35rem, 10.2vw, 3.75rem);
+                line-height: 1.04;
+                overflow-wrap: anywhere;
+            }
+            #home .home-impact-metrics {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                align-items: start;
+                gap: .65rem;
+            }
+            #home .home-impact-metrics > div:not(.home-impact-divider) {
+                min-width: 0;
+            }
+            #home .home-impact-metrics > div:not(.home-impact-divider) > div:first-child {
+                font-size: clamp(1.3rem, 6vw, 1.8rem);
+                overflow-wrap: anywhere;
+            }
+            #home .home-impact-metrics > div:not(.home-impact-divider) > div:last-child {
+                font-size: .67rem;
+                line-height: 1.35;
+            }
+            #home .home-impact-divider {
+                display: none;
+            }
+            #orbStageContainer {
+                min-height: 0;
+            }
+            #orbCore {
+                width: min(76vw, 270px);
+                height: min(76vw, 270px);
+            }
+            #orbActiveTelemetry {
+                max-width: 85%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-size: 8px;
+            }
+            #orbStageContainer > .hologram-pedestal {
+                margin-top: -1.35rem;
+                margin-bottom: .75rem;
+            }
+            #orbStageContainer [data-node] {
+                min-height: 4.2rem;
+                gap: .55rem;
+                padding: .65rem;
+                border-radius: .9rem;
+            }
+            #orbStageContainer [data-node] > div:first-child {
+                width: 2.1rem;
+                height: 2.1rem;
+            }
+            #orbStageContainer [data-node] > div:last-child {
+                min-width: 0;
+            }
+            #orbStageContainer [data-node] > div:last-child > div:first-child {
+                font-size: .68rem;
+                overflow-wrap: anywhere;
+            }
+            #orbStageContainer [data-node] > div:last-child > div:last-child {
+                font-size: .62rem;
+            }
+            #home .home-service-matrix {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: .65rem;
+            }
+            #home .home-service-matrix [data-card] {
+                min-width: 0;
+                padding: .85rem;
+                border-radius: .9rem;
+            }
+            #home .home-service-matrix [data-card] h3 {
+                font-size: .78rem;
+                overflow-wrap: anywhere;
+            }
+            #home .home-service-matrix [data-card] p {
+                font-size: .68rem;
+            }
+        }
+        @media (max-width: 380px) {
+            #home .home-service-matrix {
+                grid-template-columns: 1fr;
+            }
+            #orbStageContainer .home-satellite-grid {
+                grid-template-columns: 1fr;
+            }
+            #home .home-impact-metrics {
+                gap: .4rem;
+            }
+            header.sticky > div.glass-navbar > a > div:first-child {
+                width: 2.7rem;
+            }
+        }
+        @media (min-width: 640px) and (max-width: 1279px) {
+            #home h1 {
+                font-size: clamp(3rem, 6vw, 4.25rem);
+            }
+            #orbStageContainer [data-node] {
+                min-width: 0;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/brand-refresh.css') }}">
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+    <!-- Ambient Soft Gradient Backdrop -->
+    <div class="ambient-canvas-backdrop"></div>
+
+    <!-- ==========================================================================
+         1. FLOATING FROSTED GLASS NAVIGATION BAR (EXACT REFERENCE STRUCTURE + UPGRADES)
+         ========================================================================== -->
+    <header class="sticky top-4 z-50 px-4 sm:px-6 lg:px-10 pt-2">
+        <div class="relative max-w-[1380px] mx-auto glass-navbar rounded-2xl lg:rounded-full px-4 sm:px-7 py-3 flex items-center justify-between gap-4 transition-all">
+            
+            <!-- Left: Custom High-Precision SVG Recreation of Uploaded "VR TECH SOLUTIONS" Logo -->
+            <a href="#home" class="flex items-center gap-3 group shrink-0" aria-label="VR Tech Solutions Home">
+                <div class="relative w-16 h-11 flex items-center justify-center">
+                    <svg viewBox="0 0 210 135" class="w-full h-full overflow-visible drop-shadow-[0_4px_12px_rgba(0,240,255,0.3)]">
+                        <defs>
+                            <!-- V Left-Wing Pink-Lavender-Cyan Facet Gradient -->
+                            <linearGradient id="vrFacetPinkBlue" x1="0%" y1="0%" x2="85%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF0F8"/>
+                                <stop offset="28%" stop-color="#F472B6"/>
+                                <stop offset="65%" stop-color="#38BDF8"/>
+                                <stop offset="100%" stop-color="#0284C7"/>
+                            </linearGradient>
+                            <!-- V Right-Wing & R Core Deep Cobalt to Electric Cyan Gradient -->
+                            <linearGradient id="vrFacetElectric" x1="10%" y1="100%" x2="95%" y2="0%">
+                                <stop offset="0%" stop-color="#1D4ED8"/>
+                                <stop offset="45%" stop-color="#00B4FF"/>
+                                <stop offset="85%" stop-color="#00F0FF"/>
+                                <stop offset="100%" stop-color="#E0FFFF"/>
+                            </linearGradient>
+                            <!-- Neon Magenta-Cyan Orbital Ring Gradient -->
+                            <linearGradient id="neonOrbitRing" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#FF2E93"/>
+                                <stop offset="45%" stop-color="#C026D3"/>
+                                <stop offset="75%" stop-color="#00F0FF"/>
+                                <stop offset="100%" stop-color="#D946EF"/>
+                            </linearGradient>
+                            <filter id="neonGlowFilter" x="-30%" y="-30%" width="160%" height="160%">
+                                <feGaussianBlur stdDeviation="3.2" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <!-- Back Orbital Ring Arc -->
+                        <ellipse cx="105" cy="68" rx="96" ry="32" transform="rotate(-24 105 68)"
+                                 fill="none" stroke="url(#neonOrbitRing)" stroke-width="5.5"
+                                 stroke-dasharray="290 320" stroke-dashoffset="35" filter="url(#neonGlowFilter)" opacity="0.92"/>
+
+                        <!-- Secondary Cyan Inner Swoosh -->
+                        <ellipse cx="110" cy="72" rx="88" ry="26" transform="rotate(-17 110 72)"
+                                 fill="none" stroke="#00F0FF" stroke-width="3"
+                                 stroke-dasharray="220 350" stroke-dashoffset="-40" opacity="0.85"/>
+
+                        <!-- 3D Faceted 'V' Monogram -->
+                        <!-- Left outer facet of V -->
+                        <polygon points="18,22 46,22 82,92 67,120" fill="url(#vrFacetPinkBlue)"/>
+                        <!-- Inner right facet of V joining R -->
+                        <polygon points="82,92 114,22 140,22 92,120 67,120" fill="url(#vrFacetElectric)"/>
+                        <!-- Specular Top Bevel on V -->
+                        <polygon points="18,22 46,22 65,58 36,56" fill="#FFFFFF" opacity="0.38"/>
+
+                        <!-- 3D Faceted 'R' Monogram -->
+                        <!-- R Top Bar & Rounded Loop -->
+                        <path d="M106,22 L156,22 C180,22 192,35 192,52 C192,68 180,79 160,82 L190,120 L160,120 L133,83 L112,83 L122,62 L150,62 C160,62 166,58 166,52 C166,45 160,41 150,41 L97,41 Z"
+                              fill="url(#vrFacetElectric)"/>
+                        <!-- R Diagonal Facet Highlight -->
+                        <polygon points="106,22 154,22 142,41 97,41" fill="#E0F2FE" opacity="0.45"/>
+
+                        <!-- Front Overlapping Orbital Swoosh & Flare -->
+                        <path d="M 18,98 C 55,112 145,78 192,32" fill="none" stroke="url(#neonOrbitRing)" stroke-width="4.5" filter="url(#neonGlowFilter)"/>
+                        <!-- Glowing Star Flares on Orbit Tips -->
+                        <circle cx="188" cy="25" r="5" fill="#FFFFFF" filter="url(#neonGlowFilter)"/>
+                        <circle cx="19" cy="97" r="4.5" fill="#FF66C4" filter="url(#neonGlowFilter)"/>
+                    </svg>
+                </div>
+
+                <!-- Brand Typography: TECH SOLUTIONS -->
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl sm:text-[23px] font-extrabold tracking-tight" style="color: var(--logo-tech-color);">TECH</span>
+                    <span class="text-[9.5px] sm:text-[10.5px] font-semibold tracking-[0.28em] mt-0.5" style="color: var(--logo-sub-color);">SOLUTIONS</span>
+                </div>
+            </a>
+
+            <!-- Center: Navigation Links with Active Dot Indicator -->
+            <nav class="hidden 2xl:flex items-center gap-8 text-[14.5px] font-medium" style="color: var(--text-secondary);">
+                <a href="{{ url_for('main.index') }}" onclick="setActiveNav(this)" class="nav-item relative font-bold transition-colors" style="color: var(--text-main);">
+                    Home
+                    <span class="nav-dot absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-600 shadow-[0_0_8px_#2563EB]"></span>
+                </a>
+                <a href="{{ url_for('main.about') }}" onclick="setActiveNav(this)" class="nav-item relative hover:text-blue-600 transition-colors">About</a>
+                <a href="{{ url_for('main.services') }}" onclick="setActiveNav(this)" class="nav-item relative hover:text-blue-600 transition-colors">Services</a>
+                <a href="{{ url_for('main.projects') }}" onclick="setActiveNav(this)" class="nav-item relative hover:text-blue-600 transition-colors">Projects</a>
+                <a href="{{ url_for('careers.careers') }}" onclick="setActiveNav(this)" class="nav-item relative hover:text-blue-600 transition-colors">Careers</a>
+                <a href="{{ url_for('main.contact') }}" onclick="setActiveNav(this)" class="nav-item relative hover:text-blue-600 transition-colors">Contact</a>
+            </nav>
+
+            <!-- Right: Search, theme switcher, and login -->
+            <div class="flex items-center gap-2.5 sm:gap-3.5">
+                <!-- Search Button -->
+                <button onclick="openCommandSearch()" title="Quick Search (Ctrl+K)" class="w-9 h-9 rounded-full flex items-center justify-center border border-[var(--subtle-border)] bg-[var(--glass-pill)] hover:border-blue-500 transition-all">
+                    <i data-lucide="search" class="w-4 h-4" style="color: var(--text-main);"></i>
+                </button>
+
+                <!-- Theme Toggle Pill (Crystal Light vs Neon Obsidian Dark) -->
+                <button onclick="toggleTheme()" id="themeToggleBtn" class="px-3 py-1.5 rounded-full text-xs font-semibold border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center gap-1.5 hover:border-blue-500 transition-all" title="Switch Light / Dark Mode">
+                    <i data-lucide="moon" id="themeIcon" class="w-3.5 h-3.5 text-indigo-500"></i>
+                    <span id="themeLabel" class="hidden sm:inline">Neon Dark</span>
+                </button>
+
+                <button type="button" id="homeMobileMenuToggle" class="home-menu-toggle 2xl:hidden"
+                        aria-label="Open navigation" aria-controls="homeMobileNavigation" aria-expanded="false">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+
+            <nav id="homeMobileNavigation" class="home-mobile-nav 2xl:hidden" aria-label="Mobile navigation">
+                <a href="{{ url_for('main.index') }}">Home</a>
+                <a href="{{ url_for('main.about') }}">About</a>
+                <a href="{{ url_for('main.services') }}">Services</a>
+                <a href="{{ url_for('main.projects') }}">Projects</a>
+                <a href="{{ url_for('careers.careers') }}">Careers</a>
+                <a href="{{ url_for('main.contact') }}">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+         2. MAIN HERO SECTION (LEFT TYPOGRAPHY & METRICS + RIGHT 3D VR ORB & 6 NODES)
+         ========================================================================== -->
+    <main id="home" class="flex-grow pt-6 sm:pt-10 pb-12 px-4 sm:px-6 lg:px-10">
+        <div class="max-w-[1380px] mx-auto">
+
+            <!-- Hero 2-Column Split Grid -->
+            <div class="grid grid-cols-1 2xl:grid-cols-12 gap-10 2xl:gap-6 items-center">
+
+                <!-- ==============================================================
+                     LEFT COLUMN (5 COLS): PILL BADGE, HEADLINE, CTAs, LIVE STATS
+                     ============================================================== -->
+                <div class="2xl:col-span-5 space-y-6 sm:space-y-7 text-left z-10">
+                    
+                    <!-- Category Pill Badge: ● AI • SOFTWARE • AUTOMATION • CLOUD -->
+                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-pill-badge">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse shadow-[0_0_8px_#2563EB]"></span>
+                        <span class="text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase text-blue-700 dark:text-sky-300">
+                            AI &nbsp;•&nbsp; SOFTWARE &nbsp;•&nbsp; AUTOMATION &nbsp;•&nbsp; CLOUD
+                        </span>
+                    </div>
+
+                    <!-- Display Headline: Empowering Tomorrow's Innovations -->
+                    <h1 class="text-5xl sm:text-6xl xl:text-[68px] font-extrabold tracking-[-0.03em] leading-[1.03]">
+                        <span class="block">Empowering</span>
+                        <span class="block headline-gradient py-1">Tomorrow's</span>
+                        <span class="block">Innovations</span>
+                    </h1>
+
+                    <!-- Subtitle (Upgraded & Typo-Corrected) -->
+                    <p class="text-base sm:text-[17.5px] leading-relaxed max-w-lg font-medium" style="color: var(--text-secondary);">
+                        We're not just investing in technology; we're shaping a smarter, more connected future with enterprise AI, spatial computing, and autonomous cloud systems.
+                    </p>
+
+                    <!-- Hero actions -->
+                    <div class="flex flex-wrap items-center gap-4 pt-1">
+                        <button onclick="openVideoModal()" class="glass-pill-badge hover:scale-[1.02] active:scale-[0.99] transition-all font-bold text-sm sm:text-base px-6 py-4 rounded-2xl flex items-center gap-3" style="color: var(--text-main);">
+                            <span class="w-7 h-7 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-md">
+                                <i data-lucide="play" class="w-3.5 h-3.5 fill-current ml-0.5"></i>
+                            </span>
+                            <span>Watch Video</span>
+                        </button>
+                    </div>
+
+                    <!-- Key impact metrics -->
+                    <div class="home-impact-metrics pt-4 sm:pt-6 flex items-center gap-6 sm:gap-10">
+                        <div>
+                            <div class="text-3xl sm:text-[38px] font-extrabold tracking-tight leading-none">{{ project_count }}</div>
+                            <div class="text-xs sm:text-sm font-medium mt-1.5" style="color: var(--text-secondary);">Active Projects</div>
+                        </div>
+
+                        <div class="home-impact-divider h-11 w-[1.5px] bg-slate-300/80 dark:bg-slate-700/80"></div>
+
+                        <div>
+                            <div class="text-3xl sm:text-[38px] font-extrabold tracking-tight leading-none">{{ funding_secured }}</div>
+                            <div class="text-xs sm:text-sm font-medium mt-1.5" style="color: var(--text-secondary);">Funding Secured</div>
+                        </div>
+
+                        <div class="home-impact-divider h-11 w-[1.5px] bg-slate-300/80 dark:bg-slate-700/80"></div>
+
+                        <div>
+                            <div class="text-3xl sm:text-[38px] font-extrabold tracking-tight leading-none">{{ open_job_count }}</div>
+                            <div class="text-xs sm:text-sm font-medium mt-1.5" style="color: var(--text-secondary);">Open Jobs</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ==============================================================
+                     RIGHT COLUMN (7 COLS): 3D HOLOGRAPHIC VR TECH SOLUTIONS ORB
+                     + 6 FLOATING SATELLITE SERVICE CARDS + PEDESTAL
+                     ============================================================== -->
+                <div class="2xl:col-span-7 relative flex flex-col items-center justify-center min-h-[460px] sm:min-h-[500px] 2xl:min-h-[560px]" id="orbStageContainer">
+
+                    <!-- Decorative Floating 3D Photon Spheres around the Orbit -->
+                    <div class="hidden 2xl:block absolute top-6 left-[18%] w-5 h-5 rounded-full bg-gradient-to-br from-cyan-300 via-blue-600 to-indigo-900 shadow-[0_0_16px_#38BDF8] animate-float-1 pointer-events-none"></div>
+                    <div class="hidden 2xl:block absolute top-3 right-[28%] w-6 h-6 rounded-full bg-gradient-to-br from-pink-300 via-purple-600 to-indigo-950 shadow-[0_0_18px_#D946EF] animate-float-2 pointer-events-none"></div>
+                    <div class="hidden 2xl:block absolute bottom-28 left-[10%] w-9 h-9 rounded-full bg-gradient-to-br from-indigo-200 via-indigo-400 to-slate-700 opacity-75 blur-[0.5px] animate-float-3 pointer-events-none"></div>
+                    <div class="hidden 2xl:block absolute top-[46%] right-[4%] w-7 h-7 rounded-full bg-gradient-to-br from-purple-300 via-fuchsia-500 to-indigo-900 opacity-80 animate-float-1 pointer-events-none"></div>
+                    <div class="hidden 2xl:block absolute bottom-24 right-[20%] w-5 h-5 rounded-full bg-gradient-to-br from-cyan-300 via-blue-500 to-slate-900 shadow-[0_0_14px_#00F0FF] animate-float-2 pointer-events-none"></div>
+
+                    <!-- Thin Outer Orbital Ring Wireframe SVG -->
+                    <svg viewBox="0 0 650 520" class="hidden 2xl:block absolute inset-0 w-full h-full pointer-events-none opacity-75">
+                        <defs>
+                            <linearGradient id="outerOrbitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.55"/>
+                                <stop offset="50%" stop-color="#8B5CF6" stop-opacity="0.35"/>
+                                <stop offset="100%" stop-color="#EC4899" stop-opacity="0.55"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Large Circular Halo Connecting the 6 Nodes -->
+                        <circle cx="325" cy="245" r="210" fill="none" stroke="url(#outerOrbitGrad)" stroke-width="1.5"/>
+                        <circle cx="325" cy="245" r="175" fill="none" stroke="url(#outerOrbitGrad)" stroke-width="1" stroke-dasharray="6 8"/>
+                        <!-- Equatorial Swooshes -->
+                        <ellipse cx="325" cy="255" rx="255" ry="62" transform="rotate(-14 325 255)" fill="none" stroke="url(#outerOrbitGrad)" stroke-width="2"/>
+                        <ellipse cx="325" cy="255" rx="240" ry="48" transform="rotate(12 325 255)" fill="none" stroke="#38BDF8" stroke-opacity="0.4" stroke-width="1.5"/>
+                    </svg>
+
+                    <!-- CENTRAL 3D INTERACTIVE PLASMA ORB & BRAND CORE -->
+                    <div id="orbCore" class="relative w-[270px] h-[270px] sm:w-[330px] sm:h-[330px] flex items-center justify-center z-10 cursor-pointer group"
+                         onclick="cycleOrbService()" title="Click to pulse energy core">
+                        
+                        <!-- Outer Atmospheric Aura -->
+                        <div id="orbAura" class="absolute -inset-6 rounded-full bg-gradient-to-tr from-blue-600/35 via-cyan-400/25 to-fuchsia-500/35 blur-2xl transition-all duration-500 group-hover:scale-110"></div>
+
+                        <!-- Interactive HTML5 Canvas 3D Energy Sphere -->
+                        <canvas id="vrOrbCanvas" class="w-full h-full rounded-full relative z-10 shadow-[inset_0_0_50px_rgba(0,240,255,0.65),0_0_50px_rgba(37,99,235,0.55)]"></canvas>
+
+                        <!-- Specular Glass Dome Reflections Overlaid on Sphere -->
+                        <div class="absolute inset-0 rounded-full pointer-events-none z-20"
+                             style="background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 22%, transparent 52%), radial-gradient(circle at 72% 80%, rgba(217,70,239,0.4) 0%, transparent 45%); border: 1.5px solid rgba(255,255,255,0.45);">
+                        </div>
+
+                        <!-- Centerpiece Brand Emblem Inside the Orb: VR TECH SOLUTIONS -->
+                        <div id="orbBrandCenter" class="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none select-none px-4 text-center transition-transform duration-150">
+                            <!-- Glowing VR Monogram inside the Sphere -->
+                            <svg viewBox="0 0 210 115" class="w-28 sm:w-36 h-auto drop-shadow-[0_0_18px_rgba(0,240,255,0.95)]">
+                                <ellipse cx="105" cy="58" rx="92" ry="28" transform="rotate(-21 105 58)"
+                                         fill="none" stroke="url(#neonOrbitRing)" stroke-width="5"/>
+                                <polygon points="22,16 48,16 82,82 67,108" fill="url(#vrFacetPinkBlue)"/>
+                                <polygon points="82,82 112,16 136,16 90,108 67,108" fill="url(#vrFacetElectric)"/>
+                                <path d="M104,16 L152,16 C174,16 186,28 186,44 C186,59 175,69 156,72 L184,108 L156,108 L130,73 L110,73 L120,54 L146,54 C155,54 161,50 161,44 C161,38 155,34 146,34 L96,34 Z"
+                                      fill="url(#vrFacetElectric)"/>
+                                <path d="M 20,88 C 58,102 142,68 188,24" fill="none" stroke="#00F0FF" stroke-width="4"/>
+                            </svg>
+                            <div class="mt-[-4px]">
+                                <span class="block text-white font-extrabold text-lg sm:text-xl tracking-[0.14em] drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+                                    TECH
+                                </span>
+                                <span class="block text-cyan-200 font-bold text-[9px] sm:text-[10.5px] tracking-[0.28em] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                                    SOLUTIONS
+                                </span>
+                            </div>
+                            <!-- Active Node Telemetry Pill Inside Orb -->
+                            <div id="orbActiveTelemetry" class="mt-2 px-2.5 py-0.5 rounded-full bg-slate-950/65 border border-cyan-400/50 text-[9.5px] font-mono text-cyan-300 tracking-wider uppercase shadow-sm">
+                                ● CORE: ALL SYSTEMS LIVE
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GLOWING MULTI-TIERED HOLOGRAPHIC PEDESTAL UNDER THE ORB -->
+                    <div class="hologram-pedestal"></div>
+
+                    <!-- ==========================================================
+                         6 FLOATING SATELLITE NODES AROUND THE ORB (DESKTOP POSITIONS + MOBILE GRID)
+                         ========================================================== -->
+                    <div class="home-satellite-grid w-full grid grid-cols-2 gap-3 mt-8 2xl:mt-0 2xl:contents">
+
+                        <!-- 1. Top-Left: Artificial Intelligence (Live) -->
+                        <button onclick="selectService('ai')" data-node="ai"
+                                class="satellite-node-card animate-float-1 2xl:absolute 2xl:top-[6%] 2xl:left-[3%] z-20 p-3 sm:px-4 sm:py-3.5 rounded-2xl flex items-center gap-3 text-left w-full 2xl:w-[215px]">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-blue-500/15 dark:bg-blue-500/25 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="brain-circuit" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-[13.5px] font-bold leading-snug">Artificial<br>Intelligence</div>
+                                <div class="flex items-center gap-1.5 text-[11px] font-medium mt-1" style="color: var(--text-secondary);">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-3.5"></span>
+                                    <span>Live</span>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- 2. Mid-Left: Cloud & Data (Connected) -->
+                        <button onclick="selectService('cloud')" data-node="cloud"
+                                class="satellite-node-card animate-float-2 2xl:absolute 2xl:top-[41%] 2xl:left-[0%] z-20 p-3 sm:px-4 sm:py-3.5 rounded-2xl flex items-center gap-3 text-left w-full 2xl:w-[205px]">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-sky-500/15 dark:bg-sky-500/25 text-sky-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="cloud" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-[13.5px] font-bold leading-snug">Cloud &amp; Data</div>
+                                <div class="flex items-center gap-1.5 text-[11px] font-medium mt-1" style="color: var(--text-secondary);">
+                                    <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                                    <span>Connected</span>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- 3. Bottom-Left: Cybersecurity (Protected) -->
+                        <button onclick="selectService('cyber')" data-node="cyber"
+                                class="satellite-node-card animate-float-3 2xl:absolute 2xl:bottom-[12%] 2xl:left-[5%] z-20 p-3 sm:px-4 sm:py-3.5 rounded-2xl flex items-center gap-3 text-left w-full 2xl:w-[205px]">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-orange-500/15 dark:bg-orange-500/25 text-orange-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="shield-check" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-[13.5px] font-bold leading-snug">Cybersecurity</div>
+                                <div class="flex items-center gap-1.5 text-[11px] font-medium mt-1" style="color: var(--text-secondary);">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    <span>Protected</span>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- 4. Top-Right: Software Engineering (Building) -->
+                        <button onclick="selectService('software')" data-node="software"
+                                class="satellite-node-card animate-float-2 2xl:absolute 2xl:top-[5%] 2xl:right-[2%] z-20 p-3 sm:px-4 sm:py-3.5 rounded-2xl flex items-center gap-3 text-left w-full 2xl:w-[215px]">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-rose-500/15 dark:bg-rose-500/25 text-rose-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="code-2" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-[13.5px] font-bold leading-snug">Software<br>Engineering</div>
+                                <div class="flex items-center gap-1.5 text-[11px] font-medium mt-1" style="color: var(--text-secondary);">
+                                    <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                                    <span>Building</span>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- 5. Mid-Right: Automation (Running) -->
+                        <button onclick="selectService('automation')" data-node="automation"
+                                class="satellite-node-card animate-float-1 2xl:absolute 2xl:top-[42%] 2xl:right-[0%] z-20 p-3 sm:px-4 sm:py-3.5 rounded-2xl flex items-center gap-3 text-left w-full 2xl:w-[195px]">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="settings" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-[13.5px] font-bold leading-snug">Automation</div>
+                                <div class="flex items-center gap-1.5 text-[11px] font-medium mt-1" style="color: var(--text-secondary);">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    <span>Running</span>
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- 6. Bottom-Right: Consultancy (Scaling) -->
+                        <button onclick="selectService('consultancy')" data-node="consultancy"
+                                class="satellite-node-card animate-float-3 2xl:absolute 2xl:bottom-[12%] 2xl:right-[4%] z-20 p-3 sm:px-4 sm:py-3.5 rounded-2xl flex items-center gap-3 text-left w-full 2xl:w-[200px]">
+                            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-purple-500/15 dark:bg-purple-500/25 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="layers" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-[13.5px] font-bold leading-snug">Consultancy</div>
+                                <div class="flex items-center gap-1.5 text-[11px] font-medium mt-1" style="color: var(--text-secondary);">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    <span>Scaling</span>
+                                </div>
+                            </div>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================================================================
+                 3. BOTTOM 6-COLUMN SERVICE MATRIX ROW (EXACT REFERENCE CARDS + INTERACTIVE)
+                 ================================================================== -->
+            <div class="home-service-matrix mt-8 sm:mt-10 grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4">
+                
+                <!-- Card 1: Artificial Intelligence -->
+                <div onclick="selectService('ai')" data-card="ai" class="service-bottom-card active-service cursor-pointer rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="cpu" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-sm leading-tight">Artificial<br>Intelligence</h3>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                            Build intelligent systems that learn and adapt.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <span class="w-8 h-8 rounded-full border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Software Engineering -->
+                <div onclick="selectService('software')" data-card="software" class="service-bottom-card cursor-pointer rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="code-2" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-sm leading-tight">Software<br>Engineering</h3>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                            Scalable web and enterprise applications.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <span class="w-8 h-8 rounded-full border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Automation -->
+                <div onclick="selectService('automation')" data-card="automation" class="service-bottom-card cursor-pointer rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="settings" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-sm leading-tight">Automation</h3>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                            Intelligent workflows for higher productivity.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <span class="w-8 h-8 rounded-full border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Cloud & Data -->
+                <div onclick="selectService('cloud')" data-card="cloud" class="service-bottom-card cursor-pointer rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="cloud" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-sm leading-tight">Cloud &amp; Data</h3>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                            Modern infrastructure and data platforms.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <span class="w-8 h-8 rounded-full border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Cybersecurity -->
+                <div onclick="selectService('cyber')" data-card="cyber" class="service-bottom-card cursor-pointer rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-orange-500/15 text-orange-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-sm leading-tight">Cybersecurity</h3>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                            Secure and resilient digital systems.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <span class="w-8 h-8 rounded-full border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 6: Consultancy -->
+                <div onclick="selectService('consultancy')" data-card="consultancy" class="service-bottom-card cursor-pointer rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/15 text-purple-500 flex items-center justify-center shrink-0">
+                                <i data-lucide="layers" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-sm leading-tight">Consultancy</h3>
+                        </div>
+                        <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+                            Strategic guidance from idea to scale.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <span class="w-8 h-8 rounded-full border border-[var(--subtle-border)] bg-[var(--glass-pill)] flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer id="contact-section" class="home-footer mt-auto px-4 py-14 sm:px-6 lg:px-10">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="home-footer-grid pb-10">
+                <div class="home-footer-about max-w-sm">
+                    <a href="{{ url_for('main.index') }}" class="inline-flex items-center gap-3 text-white">
+                        <span class="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/30 bg-gradient-to-br from-blue-500/20 to-fuchsia-500/20 text-lg font-black italic text-cyan-200">VR</span>
+                        <span class="flex flex-col gap-1">
+                            <strong class="text-sm tracking-widest">VR TECH SOLUTIONS</strong>
+                            <small class="text-[10px] text-slate-400">Technology with purpose.</small>
+                        </span>
+                    </a>
+                    <p class="mt-5 max-w-sm text-xs leading-6 text-slate-400">We design and build practical digital solutions that help businesses work smarter and move forward with confidence.</p>
+                </div>
+
+                <div class="sm:justify-self-end">
+                    <h2 class="home-footer-heading">Follow us</h2>
+                    <div class="home-footer-socials" aria-label="Social media">
+                        <span class="home-footer-social" role="img" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle class="home-social-dot" cx="18" cy="6.5" r="1"></circle></svg></span>
+                        <span class="home-footer-social" role="img" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="home-social-fill" d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8z"></path></svg></span>
+                        <span class="home-footer-social" role="img" aria-label="X / Twitter" title="X / Twitter"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="home-social-fill" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.7 5.6 22H2.4l7.3-8.4L1.8 2h6.5l4.5 6.7zm-1.1 18h1.7L7.3 3.9H5.5z"></path></svg></span>
+                        <span class="home-footer-social" role="img" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="home-social-fill" d="M5.2 8.5a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M3.7 10h3v10h-3zm5 0h2.9v1.4h.1c.4-.8 1.4-1.7 2.9-1.7 3.1 0 3.7 2 3.7 4.6V20h-3v-5c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6V20h-3z"></path></svg></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 border-t border-slate-500/20 pt-5 text-[10px] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+                <span>© {{ now().year if now is defined else 2026 }} VR Tech Solutions. All rights reserved.</span>
+                <nav class="home-footer-legal" aria-label="Legal and support">
+                    <a href="{{ url_for('main.privacy_policy') }}">Privacy Policy</a>
+                    <a href="{{ url_for('main.contact') }}">Help &amp; Support</a>
+                    <a href="{{ url_for('admin.login') }}">Admin login</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================================================
+         INTERACTIVE MODALS (LAUNCH PROJECT, WATCH VIDEO, QUICK SEARCH)
+         ========================================================================== -->
+    <!-- Launch Project Modal -->
+    <div id="launchModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+        <div class="service-bottom-card max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-5">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-sky-400">VR TECH SOLUTIONS // RAPID DISCOVERY</span>
+                    <h3 class="text-2xl font-extrabold mt-0.5">Launch Your Innovation</h3>
+                </div>
+                <button onclick="closeModals()" class="w-9 h-9 rounded-full border border-[var(--subtle-border)] flex items-center justify-center">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <form method="post" action="{{ url_for('main.contact') }}" onsubmit="submitLaunchForm(event)" class="space-y-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="name" value="Website visitor">
+                <input type="hidden" name="subject" value="Architecture session request">
+                <input type="hidden" name="message" value="Please arrange an architecture session.">
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1.5" style="color: var(--text-secondary);">Work Email</label>
+                    <input type="email" name="email" required placeholder="founder@enterprise.com" class="w-full px-4 py-3 rounded-xl border border-[var(--subtle-border)] bg-[var(--glass-pill)] text-sm outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1.5" style="color: var(--text-secondary);">Primary Solution Track</label>
+                    <select id="modalServiceSelect" class="w-full px-4 py-3 rounded-xl border border-[var(--subtle-border)] bg-[var(--glass-pill)] text-sm outline-none focus:border-blue-500">
+                        <option value="ai">Artificial Intelligence &amp; Autonomous Agents</option>
+                        <option value="software">Enterprise Software &amp; Spatial Engineering</option>
+                        <option value="automation">Intelligent Workflow Automation</option>
+                        <option value="cloud">Cloud Infrastructure &amp; Data Platforms</option>
+                        <option value="cyber">Zero-Trust Cybersecurity</option>
+                        <option value="consultancy">Executive Digital Transformation Consultancy</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full btn-hero-launch text-white font-bold py-3.5 rounded-xl text-sm">
+                    Schedule Architecture Session →
+                </button>
+                <p id="launchSuccessMsg" class="hidden text-center text-xs font-bold text-emerald-500 pt-1">
+                    ✓ Request received! Our Principal Solutions Architect will reach out within 2 hours.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Watch Video Showreel Modal -->
+    <div id="videoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="service-bottom-card max-w-2xl w-full rounded-3xl p-6 sm:p-8 space-y-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                    <h3 class="text-lg font-extrabold">VR Tech Solutions — 2026 Innovation Keynote Reel</h3>
+                </div>
+                <button onclick="closeModals()" class="w-9 h-9 rounded-full border border-[var(--subtle-border)] flex items-center justify-center">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="rounded-2xl bg-slate-950 p-8 text-center space-y-4 border border-cyan-500/30 relative overflow-hidden">
+                <div class="text-cyan-400 font-mono text-xs uppercase tracking-widest">INTERACTIVE ARCHITECTURE PREVIEW</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">Shaping a Smarter, More Connected Future</div>
+                <p class="text-slate-300 text-xs sm:text-sm max-w-md mx-auto">
+                    Explore our portfolio of {{ project_count }} active projects alongside our work across software, AI, automation, and cloud.
+                </p>
+                <div class="pt-2 flex justify-center gap-3">
+                    <button onclick="closeModals(); selectService('ai');" class="btn-nav-launch text-white text-xs font-bold px-5 py-2.5 rounded-full">
+                        Explore Live AI Architecture →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         JAVASCRIPT ENGINE: 3D HOLOGRAPHIC ORB, PARALLAX, THEME & SERVICE SYNC
+         ========================================================================== -->
+    <script>
+        lucide.createIcons();
+
+        // ----------------------------------------------------------------------
+        // 1. DUAL-MODE THEME SWITCHER (CRYSTAL LIGHT vs NEON OBSIDIAN DARK)
+        // ----------------------------------------------------------------------
+        let currentTheme = 'light';
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const label = document.getElementById('themeLabel');
+            const icon = document.getElementById('themeIcon');
+            if (currentTheme === 'dark') {
+                label.textContent = 'Crystal Light';
+                icon.setAttribute('data-lucide', 'sun');
+            } else {
+                label.textContent = 'Neon Dark';
+                icon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+
+        function setActiveNav(el) {
+            document.querySelectorAll('.nav-item').forEach(link => {
+                link.classList.remove('font-bold');
+                link.style.color = 'var(--text-secondary)';
+                const dot = link.querySelector('.nav-dot');
+                if (dot) dot.remove();
+            });
+            el.classList.add('font-bold');
+            el.style.color = 'var(--text-main)';
+            const dot = document.createElement('span');
+            dot.className = 'nav-dot absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-600 shadow-[0_0_8px_#2563EB]';
+            el.appendChild(dot);
+        }
+
+        // ----------------------------------------------------------------------
+        // 2. SERVICE DATA & SYNCHRONIZATION BETWEEN SATELLITE NODES & BOTTOM CARDS
+        // ----------------------------------------------------------------------
+        const SERVICE_DATA = {
+            ai: {
+                telemetry: '● AI CORE: NEURAL AGENTS LIVE',
+                orbColors: ['#00F0FF', '#3B82F6', '#D946EF']
+            },
+            software: {
+                telemetry: '● DEV CORE: MICROSERVICES BUILDING',
+                orbColors: ['#F43F5E', '#8B5CF6', '#38BDF8']
+            },
+            automation: {
+                telemetry: '● AUTO CORE: WORKFLOWS RUNNING',
+                orbColors: ['#10B981', '#00F0FF', '#3B82F6']
+            },
+            cloud: {
+                telemetry: '● CLOUD CORE: MULTI-REGION CONNECTED',
+                orbColors: ['#38BDF8', '#2563EB', '#818CF8']
+            },
+            cyber: {
+                telemetry: '● SEC CORE: ZERO-TRUST PROTECTED',
+                orbColors: ['#F97316', '#EC4899', '#3B82F6']
+            },
+            consultancy: {
+                telemetry: '● STRATEGY CORE: VENTURE SCALING',
+                orbColors: ['#A855F7', '#EC4899', '#00F0FF']
+            }
+        };
+
+        const serviceOrder = ['ai', 'software', 'automation', 'cloud', 'cyber', 'consultancy'];
+        let currentServiceKey = 'ai';
+
+        function selectService(key) {
+            currentServiceKey = key;
+            const data = SERVICE_DATA[key];
+
+            // Update Orb Telemetry Pill
+            document.getElementById('orbActiveTelemetry').textContent = data.telemetry;
+
+            // Highlight matching Satellite Node
+            document.querySelectorAll('[data-node]').forEach(node => {
+                node.classList.toggle('active-node', node.getAttribute('data-node') === key);
+            });
+
+            // Highlight matching Bottom Service Card
+            document.querySelectorAll('[data-card]').forEach(card => {
+                card.classList.toggle('active-service', card.getAttribute('data-card') === key);
+            });
+
+        }
+
+        function cycleOrbService() {
+            const idx = (serviceOrder.indexOf(currentServiceKey) + 1) % serviceOrder.length;
+            selectService(serviceOrder[idx]);
+        }
+
+        // ----------------------------------------------------------------------
+        // 3. INTERACTIVE 3D HOLOGRAPHIC PLASMA ORB CANVAS ENGINE
+        // ----------------------------------------------------------------------
+        const orbCanvas = document.getElementById('vrOrbCanvas');
+        const orbCtx = orbCanvas.getContext('2d');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let orbTime = 0;
+        let mouseX = 0, mouseY = 0;
+
+        function resizeOrbCanvas() {
+            const rect = orbCanvas.getBoundingClientRect();
+            const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+            orbCanvas.width = rect.width * pixelRatio;
+            orbCanvas.height = rect.height * pixelRatio;
+            orbCtx.scale(pixelRatio, pixelRatio);
+        }
+
+        // Subtle Mouse Parallax on the 3D Orb & Center Logo
+        const orbStage = document.getElementById('orbStageContainer');
+        orbStage.addEventListener('mousemove', (e) => {
+            const rect = orbStage.getBoundingClientRect();
+            mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+            mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+            const brandCenter = document.getElementById('orbBrandCenter');
+            if (brandCenter) {
+                brandCenter.style.transform = `translate3d(${mouseX * 10}px, ${mouseY * 10}px, 0)`;
+            }
+        });
+        orbStage.addEventListener('mouseleave', () => {
+            mouseX = 0;
+            mouseY = 0;
+            const brandCenter = document.getElementById('orbBrandCenter');
+            if (brandCenter) brandCenter.style.transform = 'translate3d(0,0,0)';
+        });
+
+        function renderHolographicOrb() {
+            orbTime += 0.022;
+            const rect = orbCanvas.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) / 2;
+
+            orbCtx.clearRect(0, 0, w, h);
+
+            // 1. Deep Cosmic Core Gradient inside Sphere
+            const coreGrad = orbCtx.createRadialGradient(
+                cx - mouseX * 15, cy - mouseY * 15, radius * 0.08,
+                cx, cy, radius
+            );
+            coreGrad.addColorStop(0, '#1E3A8A');
+            coreGrad.addColorStop(0.45, '#0F172A');
+            coreGrad.addColorStop(0.82, '#1E1B4B');
+            coreGrad.addColorStop(1, '#38BDF8');
+
+            orbCtx.fillStyle = coreGrad;
+            orbCtx.beginPath();
+            orbCtx.arc(cx, cy, radius, 0, Math.PI * 2);
+            orbCtx.fill();
+
+            // 2. Swirling 3D Plasma Filaments & Energy Ribbons
+            const activePalette = SERVICE_DATA[currentServiceKey].orbColors;
+            orbCtx.save();
+            orbCtx.translate(cx, cy);
+            orbCtx.globalCompositeOperation = 'screen';
+
+            for (let i = 0; i < 14; i++) {
+                const angle = orbTime * (i % 2 === 0 ? 0.7 : -0.5) + (i * Math.PI) / 7;
+                orbCtx.save();
+                orbCtx.rotate(angle);
+
+                const rx = radius * (0.42 + (i % 4) * 0.13);
+                const ry = radius * (0.18 + Math.sin(orbTime + i) * 0.12);
+
+                orbCtx.strokeStyle = activePalette[i % activePalette.length];
+                orbCtx.lineWidth = i % 3 === 0 ? 3.2 : 1.6;
+                orbCtx.globalAlpha = 0.42;
+
+                orbCtx.beginPath();
+                orbCtx.ellipse(0, 0, rx, Math.abs(ry), i * 0.25, 0, Math.PI * 2);
+                orbCtx.stroke();
+
+                // Glowing photon nodes along filament
+                const px = Math.cos(orbTime * 2 + i) * rx;
+                const py = Math.sin(orbTime * 2 + i) * ry;
+                orbCtx.fillStyle = '#FFFFFF';
+                orbCtx.globalAlpha = 0.85;
+                orbCtx.beginPath();
+                orbCtx.arc(px, py, 2.2, 0, Math.PI * 2);
+                orbCtx.fill();
+
+                orbCtx.restore();
+            }
+
+            // 3. BottomPedestal Upward Light Injection Glow
+            const bottomGlow = orbCtx.createRadialGradient(0, radius * 0.85, 2, 0, radius * 0.75, radius * 0.65);
+            bottomGlow.addColorStop(0, 'rgba(0, 240, 255, 0.85)');
+            bottomGlow.addColorStop(0.5, 'rgba(59, 130, 246, 0.35)');
+            bottomGlow.addColorStop(1, 'transparent');
+            orbCtx.fillStyle = bottomGlow;
+            orbCtx.beginPath();
+            orbCtx.arc(0, 0, radius, 0, Math.PI * 2);
+            orbCtx.fill();
+
+            orbCtx.restore();
+
+            if (!prefersReducedMotion) {
+                requestAnimationFrame(renderHolographicOrb);
+            }
+        }
+
+        // ----------------------------------------------------------------------
+        // 4. MODAL CONTROLLERS
+        // ----------------------------------------------------------------------
+        function openLaunchModal() {
+            document.getElementById('modalServiceSelect').value = currentServiceKey;
+            const m = document.getElementById('launchModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+        function openVideoModal() {
+            const m = document.getElementById('videoModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+        function openCommandSearch() {
+            const query = window.prompt('Search VR Tech Solutions');
+            if (query && query.trim()) {
+                window.location.href = {{ url_for('main.search')|tojson }} + '?q=' + encodeURIComponent(query.trim());
+            }
+        }
+        function closeModals() {
+            ['launchModal', 'videoModal'].forEach(id => {
+                const m = document.getElementById(id);
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+            });
+        }
+        function submitLaunchForm(e) {
+            const message = document.querySelector('#launchModal input[name="message"]');
+            const service = document.getElementById('modalServiceSelect');
+            message.value = 'Please arrange an architecture session for: ' + service.options[service.selectedIndex].text;
+            document.getElementById('launchSuccessMsg').classList.remove('hidden');
+        }
+
+        const homeMenuToggle = document.getElementById('homeMobileMenuToggle');
+        const homeMobileNavigation = document.getElementById('homeMobileNavigation');
+        function closeHomeMobileMenu() {
+            homeMobileNavigation.classList.remove('is-open');
+            homeMenuToggle.setAttribute('aria-expanded', 'false');
+            homeMenuToggle.setAttribute('aria-label', 'Open navigation');
+            homeMenuToggle.innerHTML = '<i data-lucide="menu"></i>';
+            if (window.lucide) window.lucide.createIcons();
+        }
+        homeMenuToggle.addEventListener('click', () => {
+            const isOpen = homeMobileNavigation.classList.toggle('is-open');
+            homeMenuToggle.setAttribute('aria-expanded', String(isOpen));
+            homeMenuToggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+            homeMenuToggle.innerHTML = `<i data-lucide="${isOpen ? 'x' : 'menu'}"></i>`;
+            if (window.lucide) window.lucide.createIcons();
+        });
+        homeMobileNavigation.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeHomeMobileMenu);
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') closeHomeMobileMenu();
+        });
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) closeHomeMobileMenu();
+        });
+
+        window.onload = function () {
+            resizeOrbCanvas();
+            selectService('ai');
+            renderHolographicOrb();
+        };
+        window.addEventListener('resize', resizeOrbCanvas);
+    </script>
+</body>
+</html>

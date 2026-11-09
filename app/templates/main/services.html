@@ -1,0 +1,61 @@
+
+{% extends "base.html" %}
+{% block title %}Services | VR Tech Solutions{% endblock %}
+{% block meta_description %}Explore AI, custom software, automation, cloud, cybersecurity, and technology consulting services from VR Tech Solutions.{% endblock %}
+{% block content %}
+<section class="vtx-hero">
+    <div class="vtx-container vtx-hero-grid">
+        <div class="vtx-hero-copy">
+            <div class="vtx-kicker"><span class="vtx-kicker-dot"></span> AI · SOFTWARE · AUTOMATION · CLOUD</div>
+            <h1>Technology that moves your business <span class="vtx-gradient-text">forward.</span></h1>
+            <p class="vtx-lead">From intelligent AI systems to dependable business software, we turn complex challenges into practical digital solutions designed around your goals.</p>
+            <div class="vtx-actions">
+                <a href="{{ url_for('main.contact') }}" class="vtx-button vtx-button-primary">Discuss a project <span>↗</span></a>
+                <a href="#service-list" class="vtx-button vtx-button-secondary">Explore services <span>↓</span></a>
+            </div>
+            <div class="vtx-hero-meta">
+                <div class="vtx-meta-item"><strong>AI-Ready</strong><span>Intelligent experiences</span></div><div class="vtx-meta-divider"></div>
+                <div class="vtx-meta-item"><strong>End-to-End</strong><span>Plan to deployment</span></div><div class="vtx-meta-divider"></div>
+                <div class="vtx-meta-item"><strong>Built to Scale</strong><span>Growth-minded systems</span></div>
+            </div>
+        </div>
+        <div class="vtx-visual" aria-label="Illustration of VR Tech Solutions technology services">
+            <div class="vtx-orbit vtx-orbit-a"></div><div class="vtx-orbit vtx-orbit-b"></div><div class="vtx-orbit vtx-orbit-c"></div>
+            <div class="vtx-orb-core"><span class="vtx-orb-mark">VR</span><strong>TECH</strong><small>SOLUTIONS</small><div class="vtx-orb-pill">● TECH IN MOTION</div></div>
+            <div class="vtx-node vtx-node-a"><span class="vtx-node-icon vtx-ico-blue">✦</span><div><strong>Artificial Intelligence</strong><small><i class="vtx-dot"></i> Intelligent systems</small></div></div>
+            <div class="vtx-node vtx-node-b"><span class="vtx-node-icon vtx-ico-pink">&lt;/&gt;</span><div><strong>Software Engineering</strong><small><i class="vtx-dot"></i> Built for business</small></div></div>
+            <div class="vtx-node vtx-node-c"><span class="vtx-node-icon vtx-ico-cyan">☁</span><div><strong>Cloud &amp; Data</strong><small><i class="vtx-dot"></i> Connected</small></div></div>
+            <div class="vtx-node vtx-node-d"><span class="vtx-node-icon vtx-ico-green">⚙</span><div><strong>Automation</strong><small><i class="vtx-dot"></i> Smarter workflows</small></div></div>
+            <div class="vtx-node vtx-node-e"><span class="vtx-node-icon vtx-ico-orange">◇</span><div><strong>Cybersecurity</strong><small><i class="vtx-dot"></i> Security-minded</small></div></div>
+            <div class="vtx-node vtx-node-f"><span class="vtx-node-icon vtx-ico-purple">▱</span><div><strong>IT Consulting</strong><small><i class="vtx-dot"></i> Strategic guidance</small></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="vtx-section" id="service-list">
+    <div class="vtx-container">
+        <div class="vtx-section-heading"><div class="vtx-kicker">WHAT WE DO</div><h2>One partner for your <span class="vtx-gradient-text">digital journey.</span></h2><p>Choose a starting point below. We can shape a solution around your workflows, users, budget, and longer-term plans.</p></div>
+        <div class="vtx-card-grid">
+            <article class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-blue">✦</span><span class="vtx-card-number">01 / AI</span></div><h3>Artificial Intelligence</h3><p>Bring practical AI into everyday work with assistants, knowledge search, intelligent document processing, and machine-learning applications.</p><div class="vtx-tag-row"><span class="vtx-tag">Generative AI</span><span class="vtx-tag">AI Assistants</span><span class="vtx-tag">RAG</span></div><a class="vtx-card-link" href="{{ url_for('main.contact') }}">Explore AI solutions <span>↗</span></a></article>
+            <article class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-pink">&lt;/&gt;</span><span class="vtx-card-number">02 / DEV</span></div><h3>Software Development</h3><p>Develop responsive websites, business portals, APIs, and custom applications shaped to your requirements and users.</p><div class="vtx-tag-row"><span class="vtx-tag">Web Apps</span><span class="vtx-tag">APIs</span><span class="vtx-tag">Custom Software</span></div><a class="vtx-card-link" href="{{ url_for('main.contact') }}">Build your application <span>↗</span></a></article>
+            <article class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-green">⚙</span><span class="vtx-card-number">03 / FLOW</span></div><h3>Business Automation</h3><p>Reduce repetitive tasks and connect tools through structured workflows, system integrations, and useful automation.</p><div class="vtx-tag-row"><span class="vtx-tag">Workflow Design</span><span class="vtx-tag">Integrations</span><span class="vtx-tag">Process Tools</span></div><a class="vtx-card-link" href="{{ url_for('main.contact') }}">Improve a workflow <span>↗</span></a></article>
+            <article class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-cyan">☁</span><span class="vtx-card-number">04 / DATA</span></div><h3>Cloud &amp; Data Solutions</h3><p>Design maintainable databases and cloud-ready applications with a focus on reliability, access, and growth.</p><div class="vtx-tag-row"><span class="vtx-tag">Cloud Deployment</span><span class="vtx-tag">Databases</span><span class="vtx-tag">Integration</span></div><a class="vtx-card-link" href="{{ url_for('main.contact') }}">Plan your platform <span>↗</span></a></article>
+            <article class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-orange">◇</span><span class="vtx-card-number">05 / TRUST</span></div><h3>Security-Conscious Engineering</h3><p>Build more resilient applications with secure development practices, access controls, and thoughtful risk review.</p><div class="vtx-tag-row"><span class="vtx-tag">Secure Design</span><span class="vtx-tag">Access Control</span><span class="vtx-tag">Risk Review</span></div><a class="vtx-card-link" href="{{ url_for('main.contact') }}">Review requirements <span>↗</span></a></article>
+            <article class="vtx-card"><div class="vtx-card-top"><span class="vtx-card-icon vtx-ico-purple">▱</span><span class="vtx-card-number">06 / ADVISE</span></div><h3>IT Consulting</h3><p>Get technical guidance for product planning, modernization, architecture choices, and digital transformation.</p><div class="vtx-tag-row"><span class="vtx-tag">Roadmaps</span><span class="vtx-tag">Architecture</span><span class="vtx-tag">Planning</span></div><a class="vtx-card-link" href="{{ url_for('main.contact') }}">Talk with our team <span>↗</span></a></article>
+        </div>
+    </div>
+</section>
+
+<section class="vtx-section vtx-section-tint">
+    <div class="vtx-container">
+        <div class="vtx-section-heading"><div class="vtx-kicker">HOW WE WORK</div><h2>A clear path from idea to <span class="vtx-gradient-text">delivery.</span></h2><p>We keep the work collaborative and the next step visible at every stage.</p></div>
+        <div class="vtx-process-grid">
+            <article class="vtx-process-card"><div class="vtx-process-number">01</div><h3>Discover</h3><p>Understand the challenge, audience, constraints, and intended result.</p></article>
+            <article class="vtx-process-card"><div class="vtx-process-number">02</div><h3>Design</h3><p>Agree on the experience, technical approach, scope, and delivery plan.</p></article>
+            <article class="vtx-process-card"><div class="vtx-process-number">03</div><h3>Develop</h3><p>Build in manageable steps, validate key decisions, and refine the solution.</p></article>
+            <article class="vtx-process-card"><div class="vtx-process-number">04</div><h3>Deliver</h3><p>Prepare for launch and identify sensible improvements for the next phase.</p></article>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

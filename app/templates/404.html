@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found | VR Tech Solutions{% endblock %}
+
+{% block content %}
+<section class="section-padding" style="min-height: 55vh; display: grid; place-items: center; text-align: center">
+    <div>
+        <h1>404</h1>
+        <p>The page you requested could not be found.</p>
+        <a class="btn btn-gold" href="{{ url_for('main.index') }}">Return to home</a>
+    </div>
+</section>
+{% endblock %}

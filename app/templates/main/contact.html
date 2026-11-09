@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+{% block title %}Contact Us | VR Tech Solutions{% endblock %}
+{% block meta_description %}Contact VR Tech Solutions to discuss software development, AI, automation, cloud systems, or a digital project idea.{% endblock %}
+{% block content %}
+<section class="vtx-hero" style="padding-bottom:48px"><div class="vtx-container"><div class="vtx-hero-copy" style="max-width:850px;margin:0 auto;text-align:center"><div class="vtx-kicker"><span class="vtx-kicker-dot"></span> LET'S TALK ABOUT YOUR IDEA</div><h1>Make your next move <span class="vtx-gradient-text">with clarity.</span></h1><p class="vtx-lead" style="margin:22px auto 0">Tell us about your project, your goals, or the challenge you want to solve. We'll use your message to understand where the conversation should begin.</p></div></div></section>
+
+<section class="vtx-section" style="padding-top:35px"><div class="vtx-container vtx-contact-layout">
+    <aside class="vtx-contact-panel"><div class="vtx-kicker">START A CONVERSATION</div><h2>What would you like to build?</h2><p>Share a little context and the best way to respond. Useful details include the problem, who will use the solution, and any time or technical constraints.</p><div class="vtx-contact-info">
+        <div class="vtx-contact-info-item"><div class="vtx-contact-info-icon"><i data-lucide="message-square"></i></div><div><strong>Project enquiries</strong><span>Websites, business applications, AI, automation, and integrations.</span></div></div>
+        <div class="vtx-contact-info-item"><div class="vtx-contact-info-icon"><i data-lucide="lightbulb"></i></div><div><strong>Early-stage ideas</strong><span>Discuss options, priorities, and what a practical first version could include.</span></div></div>
+        <div class="vtx-contact-info-item"><div class="vtx-contact-info-icon"><i data-lucide="users"></i></div><div><strong>Careers &amp; collaboration</strong><span>Introduce your skills, portfolio, or a potential collaboration.</span></div></div>
+    </div><div class="vtx-note" style="margin-top:17px">Please avoid including passwords, payment details, or other sensitive information in this form.</div></aside>
+
+    <section class="vtx-contact-panel"><div class="vtx-kicker">PROJECT ENQUIRY</div><h2>Send us a message</h2><p>Fields marked with an asterisk are required.</p>
+        <form method="post" action="{{ url_for('main.contact') }}" class="vtx-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="vtx-form-grid">
+                <div><label for="contactName">Full name *</label><input id="contactName" name="name" type="text" placeholder="Your name" autocomplete="name" required></div>
+                <div><label for="contactEmail">Email address *</label><input id="contactEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required></div>
+                <div class="vtx-field-full"><label for="contactSubject">What is this about? *</label><select id="contactSubject" name="subject" required><option value="" selected disabled>Select a topic</option><option>Website or software development</option><option>Artificial intelligence</option><option>Business automation</option><option>Cloud and data</option><option>Security and technical consulting</option><option>Careers</option><option>Other enquiry</option></select></div>
+                <div class="vtx-field-full"><label for="contactMessage">Project details *</label><textarea id="contactMessage" name="message" placeholder="Tell us about your idea, goals, and what you need help with..." required></textarea></div>
+            </div>
+            <button type="submit" class="vtx-button vtx-button-primary vtx-form-submit">Send enquiry <span>↗</span></button>
+            <p class="vtx-privacy-note">Your message will be handled through the site's contact workflow.</p>
+        </form>
+    </section>
+</div></section>
+
+<section class="vtx-container vtx-cta"><div class="vtx-cta-inner"><div class="vtx-kicker">NOT SURE WHERE TO START?</div><h2>Start with the challenge, <span>not the technology.</span></h2><p>Explain what is difficult today and what a better result would look like. We can explore the technology choices together.</p><a href="{{ url_for('main.services') }}" class="vtx-button vtx-button-white">Explore our services <span>↗</span></a></div></section>
+{% endblock %}

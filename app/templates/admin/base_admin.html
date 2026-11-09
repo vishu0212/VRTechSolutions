@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-admin-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2f5ff">
+    <title>{% block title %}Admin Panel | VR Tech Solutions{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-panel.css') }}">
+
+    {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/professional.css') }}">
+</head>
+
+<body class="va-body">
+    <div class="va-bg-glow" aria-hidden="true"></div>
+
+    <aside class="va-sidebar" id="vaSidebar">
+        <a class="va-brand" href="{{ url_for('admin.dashboard') }}">
+            <span class="va-brand-mark">VR</span>
+            <span class="va-brand-text">
+                <strong>TECH SOLUTIONS</strong>
+                <small>ADMIN CONSOLE</small>
+            </span>
+        </a>
+
+        <div class="va-sidebar-label">WORKSPACE</div>
+
+        <nav class="va-side-nav" aria-label="Admin navigation">
+            <a href="{{ url_for('admin.dashboard') }}"
+               class="{% if request.endpoint == 'admin.dashboard' %}is-active{% endif %}">
+                <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('admin.services') }}"
+               class="{% if request.endpoint in ['admin.services', 'admin.edit_service'] %}is-active{% endif %}">
+                <i data-lucide="layers"></i><span>Services</span>
+            </a>
+
+            <a href="{{ url_for('admin.projects') }}"
+               class="{% if request.endpoint == 'admin.projects' %}is-active{% endif %}">
+                <i data-lucide="briefcase-business"></i><span>Projects</span>
+            </a>
+
+            <a href="{{ url_for('admin.enquiries') }}"
+               class="{% if request.endpoint == 'admin.enquiries' %}is-active{% endif %}">
+                <i data-lucide="messages-square"></i><span>Enquiries</span>
+            </a>
+
+            <a href="{{ url_for('admin.jobs') }}"
+               class="{% if request.endpoint == 'admin.jobs' %}is-active{% endif %}">
+                <i data-lucide="clipboard-list"></i><span>Job listings</span>
+            </a>
+
+            <a href="{{ url_for('admin.applications') }}"
+               class="{% if request.endpoint in ['admin.applications', 'admin.application'] %}is-active{% endif %}">
+                <i data-lucide="file-user"></i><span>Applications</span>
+            </a>
+        </nav>
+
+        <div class="va-sidebar-bottom">
+            <div class="va-sidebar-status">
+                <span class="va-status-dot"></span>
+                <span>Admin workspace</span>
+            </div>
+
+            <a class="va-public-site"
+               href="{{ url_for('main.index') }}"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i data-lucide="external-link"></i>
+                <span>View website</span>
+            </a>
+
+            <form method="post" action="{{ url_for('admin.logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="va-logout" type="submit">
+                    <i data-lucide="log-out"></i>
+                    <span>Sign out</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="va-main-wrap">
+        <header class="va-topbar">
+            <button type="button"
+                    id="vaSidebarToggle"
+                    class="va-icon-btn va-mobile-only"
+                    aria-label="Open navigation"
+                    aria-expanded="false">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <div class="va-breadcrumb">
+                <span>VR TECH</span>
+                <i data-lucide="chevron-right"></i>
+                <strong>{% block breadcrumb %}Overview{% endblock %}</strong>
+            </div>
+
+            <div class="va-topbar-actions">
+                <span class="va-admin-chip">
+                    <span class="va-status-dot"></span>
+                    Control panel
+                </span>
+
+                <button type="button"
+                        class="va-icon-btn"
+                        id="vaThemeToggle"
+                        aria-label="Toggle admin theme"
+                        title="Toggle theme">
+                    <i data-lucide="moon" id="vaThemeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="va-main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="va-flash-stack" aria-live="polite">
+                        {% for category, message in messages %}
+                            <div class="va-flash va-flash-{{ category }}">
+                                <span>{{ message }}</span>
+                                <button type="button"
+                                        class="va-flash-close"
+                                        aria-label="Dismiss message">×</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block admin_content %}{% endblock %}
+        </main>
+
+        <footer class="va-footer">
+            <span>© 2026 VR Tech Solutions</span>
+            <span>Admin workspace · Handle customer data responsibly</span>
+        </footer>
+    </div>
+
+    <div class="va-mobile-scrim" id="vaMobileScrim" hidden></div>
+
+    <script src="{{ url_for('static', filename='js/admin-panel.js') }}" defer></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

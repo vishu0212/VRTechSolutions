@@ -1,0 +1,60 @@
+-- Keep candidate applications and resume references when a job is deleted.
+PRAGMA defer_foreign_keys = true;
+
+CREATE TABLE job_applications_new (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    job_id INTEGER,
+    full_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    current_location TEXT NOT NULL,
+    experience TEXT,
+    cover_letter TEXT,
+    resume_filename TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'new',
+    admin_notes TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_job_applications_job
+        FOREIGN KEY (job_id) REFERENCES jobs(id)
+        ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+INSERT INTO job_applications_new (
+    id,
+    job_id,
+    full_name,
+    email,
+    phone,
+    current_location,
+    experience,
+    cover_letter,
+    resume_filename,
+    status,
+    admin_notes,
+    created_at,
+    updated_at
+)
+SELECT
+    id,
+    job_id,
+    full_name,
+    email,
+    phone,
+    current_location,
+    experience,
+    cover_letter,
+    resume_filename,
+    status,
+    admin_notes,
+    created_at,
+    updated_at
+FROM job_applications;
+
+DROP TABLE job_applications;
+ALTER TABLE job_applications_new RENAME TO job_applications;
+
+CREATE INDEX idx_applications_job ON job_applications(job_id);
+CREATE INDEX idx_applications_status ON job_applications(status);
+CREATE INDEX idx_applications_created ON job_applications(created_at);
+CREATE INDEX idx_applications_email ON job_applications(email);

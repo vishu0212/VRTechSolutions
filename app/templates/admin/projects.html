@@ -1,0 +1,170 @@
+﻿{% extends "admin/base_admin.html" %}
+
+{% block title %}Projects | VR Tech Solutions Admin{% endblock %}
+{% block breadcrumb %}Projects{% endblock %}
+
+{% block admin_content %}
+<section class="va-page-heading">
+    <div>
+        <div class="va-eyebrow">PORTFOLIO MANAGEMENT</div>
+        <h1>Projects</h1>
+        <p>Add projects and control which projects appear on the public website.</p>
+    </div>
+    <span class="va-heading-count">
+        <strong>{{ projects|length }}</strong> projects
+    </span>
+</section>
+
+<div class="va-content-grid va-projects-layout">
+    <section class="va-panel va-form-panel">
+        <div class="va-panel-heading">
+            <div>
+                <div class="va-eyebrow">NEW PORTFOLIO ITEM</div>
+                <h2>Add a project</h2>
+                <p>Share the project and the technology behind it.</p>
+            </div>
+            <span class="va-heading-icon"><i data-lucide="folder-plus"></i></span>
+        </div>
+
+        <form method="post" class="va-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="va-field">
+                <label for="projectTitle">Project title *</label>
+                <input id="projectTitle" name="title" maxlength="150"
+                       required placeholder="Project name">
+            </div>
+
+            <div class="va-form-row">
+                <div class="va-field">
+                    <label for="projectCategory">Category</label>
+                    <input id="projectCategory" name="category"
+                           maxlength="100" placeholder="AI, Web, Automation">
+                </div>
+                <div class="va-field">
+                    <label for="projectOrder">Display order</label>
+                    <input id="projectOrder" name="display_order"
+                           type="number" min="0" max="9999" value="0">
+                </div>
+            </div>
+
+            <div class="va-field">
+                <label for="projectShortDescription">Short description</label>
+                <textarea id="projectShortDescription" name="short_description"
+                          rows="2" maxlength="300"
+                          placeholder="A short project summary"></textarea>
+            </div>
+
+            <div class="va-field">
+                <label for="projectDescription">Full description *</label>
+                <textarea id="projectDescription" name="description"
+                          rows="5" required
+                          placeholder="Describe the challenge, solution, and outcome"></textarea>
+            </div>
+
+            <div class="va-field">
+                <label for="projectTechnologies">Technologies</label>
+                <input id="projectTechnologies" name="technologies"
+                       maxlength="500" placeholder="Flask, Python, MySQL">
+            </div>
+
+            <div class="va-field">
+                <label for="projectImageUrl">Project image URL</label>
+                <input id="projectImageUrl" name="image_url" type="url"
+                       maxlength="500" placeholder="https://example.com/image.jpg">
+                <small>Enter a publicly accessible image URL.</small>
+            </div>
+
+            <div class="va-field">
+                <label for="projectUrl">Project URL</label>
+                <input id="projectUrl" name="project_url" type="url"
+                       maxlength="500" placeholder="https://example.com">
+            </div>
+
+            <div class="va-form-row">
+                <label class="va-check">
+                    <input type="checkbox" name="is_active" checked>
+                    <span><strong>Active</strong><small>Visible on the website.</small></span>
+                </label>
+                <label class="va-check">
+                    <input type="checkbox" name="is_featured">
+                    <span><strong>Featured</strong><small>Highlight on homepage.</small></span>
+                </label>
+            </div>
+
+            <button type="submit" class="va-btn va-btn-primary va-btn-wide">
+                Add project <i data-lucide="plus"></i>
+            </button>
+        </form>
+    </section>
+
+    <section class="va-panel">
+        <div class="va-panel-heading">
+            <div>
+                <div class="va-eyebrow">PORTFOLIO LIBRARY</div>
+                <h2>Existing projects</h2>
+                <p>Review, edit, and manage your projects.</p>
+            </div>
+        </div>
+
+        <div class="va-manage-list">
+        {% for item in projects %}
+            <article class="va-manage-item va-project-manage-item">
+                {% if item.image_url %}
+                    <img class="va-project-thumb"
+                         src="{{ item.image_url }}" alt="" loading="lazy">
+                {% else %}
+                    <span class="va-manage-icon">
+                        <i data-lucide="briefcase-business"></i>
+                    </span>
+                {% endif %}
+
+                <div class="va-manage-info">
+                    <div class="va-manage-title-line">
+                        <strong>{{ item.title }}</strong>
+                        <span class="va-status-badge {{ 'va-status-active' if item.is_active else 'va-status-hidden' }}">
+                            {{ 'Active' if item.is_active else 'Hidden' }}
+                        </span>
+                    </div>
+                    <p>{{ item.short_description|default(item.description, true)|truncate(150) }}</p>
+                    <small>
+                        {{ item.category|default('Project', true) }} &middot;
+                        {{ item.technologies|default('Technology details not set', true) }}
+                    </small>
+                </div>
+
+                <div class="va-row-actions">
+                    <a class="va-btn va-btn-secondary va-btn-small"
+                       href="{{ url_for('admin.project_edit', project_id=item.id) }}">
+                        Edit
+                    </a>
+
+                    <form method="post"
+                          action="{{ url_for('admin.toggle_project', item_id=item.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="va-btn va-btn-secondary va-btn-small">
+                            {{ 'Hide' if item.is_active else 'Activate' }}
+                        </button>
+                    </form>
+
+                    <form method="post"
+                          action="{{ url_for('admin.delete_project', item_id=item.id) }}"
+                          data-confirm="Delete this project? This cannot be undone.">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="va-btn va-btn-danger va-btn-small" type="submit">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </article>
+        {% else %}
+            <div class="va-empty-state">
+                <i data-lucide="folder-open"></i>
+                <strong>No projects yet</strong>
+                <p>Add a project using the form to get started.</p>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

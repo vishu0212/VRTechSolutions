@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+{% block title %}Careers | VR Tech Solutions{% endblock %}
+{% block meta_description %}Explore career paths and connect with VR Tech Solutions about software, AI, automation, cloud, and design opportunities.{% endblock %}
+{% block content %}
+<section class="vtx-hero">
+    <div class="vtx-container vtx-hero-grid">
+        <div class="vtx-hero-copy"><div class="vtx-kicker"><span class="vtx-kicker-dot"></span> CAREERS · LEARNING · BUILDING</div><h1>Build what comes <span class="vtx-gradient-text">next.</span></h1><p class="vtx-lead">We value curious minds, practical problem-solvers, thoughtful collaborators, and people who enjoy learning how technology can make work better.</p><div class="vtx-actions"><a href="#current-openings" class="vtx-button vtx-button-primary">View open roles <span>↓</span></a><a href="{{ url_for('main.contact') }}" class="vtx-button vtx-button-secondary">Introduce yourself <span>↗</span></a></div><div class="vtx-career-points"><div class="vtx-career-point"><span>✦</span> Learn by solving real problems</div><div class="vtx-career-point"><span>↗</span> Collaborate across disciplines</div><div class="vtx-career-point"><span>◎</span> Keep improving your craft</div><div class="vtx-career-point"><span>⌘</span> Think about users first</div></div></div>
+        <div class="vtx-about-visual" aria-label="Illustration representing connected people and technology"><div class="vtx-about-orbit"></div><div class="vtx-about-orbit"></div><div class="vtx-about-orbit"></div><div class="vtx-about-core"><strong>VR</strong><span>GROW TOGETHER</span></div><div class="vtx-node vtx-node-a"><span class="vtx-node-icon vtx-ico-blue">&lt;/&gt;</span><div><strong>Engineering</strong><small><i class="vtx-dot"></i> Build &amp; improve</small></div></div><div class="vtx-node vtx-node-b"><span class="vtx-node-icon vtx-ico-purple">✦</span><div><strong>AI &amp; Automation</strong><small><i class="vtx-dot"></i> Explore ideas</small></div></div><div class="vtx-node vtx-node-e"><span class="vtx-node-icon vtx-ico-green">◎</span><div><strong>Design &amp; Product</strong><small><i class="vtx-dot"></i> User-focused</small></div></div><div class="vtx-node vtx-node-f"><span class="vtx-node-icon vtx-ico-pink">↗</span><div><strong>Growth Mindset</strong><small><i class="vtx-dot"></i> Learn together</small></div></div></div>
+    </div>
+</section>
+
+<section class="vtx-section" id="current-openings">
+    <div class="vtx-container">
+        <div class="vtx-section-heading">
+            <div class="vtx-kicker">CURRENT OPENINGS</div>
+            <h2>Find your next <span class="vtx-gradient-text">opportunity.</span></h2>
+            <p>These are the roles currently accepting applications.</p>
+        </div>
+        {% if jobs %}
+        <div class="vtx-card-grid">
+            {% for job in jobs %}
+            <article class="vtx-role-card">
+                <span class="vtx-role-label">{{ job.department or "Open position" }}</span>
+                <div class="vtx-card-icon vtx-ico-blue" style="margin-top:18px">↗</div>
+                <h3>{{ job.title }}</h3>
+                <p>
+                    {{ job.short_description or job.description|truncate(220) }}
+                </p>
+                <p>
+                    {{ job.location or "Location not specified" }}
+                    {% if job.employment_type %} · {{ job.employment_type }}{% endif %}
+                    {% if job.closing_date %} · Apply by {{ job.closing_date.strftime("%d %b %Y") }}{% endif %}
+                </p>
+                <a class="vtx-card-link"
+                   href="{{ url_for('careers.apply', slug=job.slug) }}">
+                    View role and apply <span>↗</span>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="vtx-note">
+            <strong style="color:var(--vtx-text)">There are no open vacancies right now.</strong>
+            You can still <a class="vtx-card-link" href="{{ url_for('main.contact') }}?topic=careers">contact us</a>
+            to introduce yourself and share your interests.
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="vtx-section vtx-section-tint"><div class="vtx-container"><div class="vtx-section-heading"><div class="vtx-kicker">OUR WORKING PRINCIPLES</div><h2>Good work grows from <span class="vtx-gradient-text">good habits.</span></h2></div><div class="vtx-process-grid"><article class="vtx-process-card"><div class="vtx-process-number">01</div><h3>Stay curious</h3><p>Ask questions, explore alternatives, and share what you learn.</p></article><article class="vtx-process-card"><div class="vtx-process-number">02</div><h3>Build with care</h3><p>Think about reliability, accessibility, maintainability, and users.</p></article><article class="vtx-process-card"><div class="vtx-process-number">03</div><h3>Communicate clearly</h3><p>Share progress, explain trade-offs, and ask for feedback early.</p></article><article class="vtx-process-card"><div class="vtx-process-number">04</div><h3>Keep improving</h3><p>Use feedback and reflection to improve the product and your craft.</p></article></div></div></section>
+
+{% endblock %}

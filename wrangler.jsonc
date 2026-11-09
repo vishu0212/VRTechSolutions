@@ -1,0 +1,22 @@
+
+{
+  "name": "vr-tech-solutions",
+  "main": "src/worker.py",
+  "compatibility_date": "2026-11-06",
+  "compatibility_flags": [
+    "python_workers"
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vrtech-db",
+      "database_id": "1b5e1601-91e4-46b9-944d-63e4d8b225ce",
+      "migrations_dir": "migrations",
+      "remote": true
+    }
+  ],
+  "assets": {
+    "directory": "./worker_assets",
+    "binding": "ASSETS"
+  }
+}

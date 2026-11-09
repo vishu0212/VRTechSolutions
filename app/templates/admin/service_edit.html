@@ -1,0 +1,132 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Edit Service | VR Tech Solutions Admin{% endblock %}
+
+{% block breadcrumb %}
+<a href="{{ url_for('admin.services') }}">Services</a> / Edit
+{% endblock %}
+
+{% block admin_content %}
+<section class="va-page-heading">
+    <div>
+        <div class="va-eyebrow">CONTENT / SERVICES</div>
+        <h1>Edit service</h1>
+        <p>Update the information and visibility for <strong>{{ service.title }}</strong>.</p>
+    </div>
+
+    <a class="va-btn va-btn-secondary" href="{{ url_for('admin.services') }}">
+        <i data-lucide="arrow-left"></i> Back to services
+    </a>
+</section>
+
+<section class="va-panel va-edit-panel">
+    <div class="va-panel-heading">
+        <div>
+            <div class="va-eyebrow">SERVICE DETAILS</div>
+            <h2>Update information</h2>
+            <p>Changes will be used by the public services page.</p>
+        </div>
+        <span class="va-heading-icon">
+            <i data-lucide="pencil-line"></i>
+        </span>
+    </div>
+
+    <form method="post" class="va-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="va-field">
+            <label for="serviceTitle">Service title *</label>
+            <input
+                id="serviceTitle"
+                name="title"
+                value="{{ service.title }}"
+                maxlength="150"
+                required
+            >
+        </div>
+
+        <div class="va-field">
+            <label for="serviceShortDescription">Short description</label>
+            <textarea
+                id="serviceShortDescription"
+                name="short_description"
+                rows="2"
+                maxlength="500"
+            >{{ service.short_description|default('', true) }}</textarea>
+        </div>
+
+        <div class="va-field">
+            <label for="serviceDescription">Full description *</label>
+            <textarea
+                id="serviceDescription"
+                name="description"
+                rows="6"
+                required
+            >{{ service.description }}</textarea>
+        </div>
+
+        <div class="va-form-row">
+            <div class="va-field">
+                <label for="serviceIcon">Icon key</label>
+                <select id="serviceIcon" name="icon">
+                    {% for icon in [
+                        'brain-circuit',
+                        'code-2',
+                        'cloud',
+                        'workflow',
+                        'shield-check',
+                        'settings',
+                        'layers',
+                        'sparkles'
+                    ] %}
+                    <option
+                        value="{{ icon }}"
+                        {% if service.icon == icon %}selected{% endif %}
+                    >
+                        {{ icon|replace('-', ' ')|title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="va-field">
+                <label for="serviceOrder">Display order</label>
+                <input
+                    id="serviceOrder"
+                    name="display_order"
+                    type="number"
+                    value="{{ service.display_order|default(0, true) }}"
+                    min="0"
+                    max="9999"
+                >
+            </div>
+        </div>
+
+        <label class="va-check">
+            <input
+                type="checkbox"
+                name="is_active"
+                {% if service.is_active %}checked{% endif %}
+            >
+            <span>
+                <strong>Active on website</strong>
+                <small>Uncheck to hide this service from visitors.</small>
+            </span>
+        </label>
+
+        <div class="va-form-actions">
+            <button type="submit" class="va-btn va-btn-primary">
+                Save changes <i data-lucide="check"></i>
+            </button>
+
+            <a
+                href="{{ url_for('admin.services') }}"
+                class="va-btn va-btn-secondary"
+            >
+                Cancel
+            </a>
+        </div>
+    </form>
+</section>
+{% endblock %}

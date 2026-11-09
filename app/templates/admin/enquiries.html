@@ -1,0 +1,157 @@
+﻿{% extends "admin/base_admin.html" %}
+
+{% block title %}Enquiries | VR Tech Solutions Admin{% endblock %}
+{% block breadcrumb %}Enquiries{% endblock %}
+
+{% block admin_content %}
+<section class="va-page-heading">
+    <div>
+        <div class="va-eyebrow">CUSTOMER COMMUNICATION</div>
+        <h1>Enquiries</h1>
+        <p>Review contact form submissions and track follow-up status.</p>
+    </div>
+    <span class="va-heading-count">
+        <strong>{{ enquiries|length }}</strong> messages
+    </span>
+</section>
+
+<section class="va-panel">
+    <div class="va-panel-heading">
+        <div>
+            <div class="va-eyebrow">INBOX</div>
+            <h2>All website enquiries</h2>
+            <p>Manage customer messages, follow-up status and internal notes.</p>
+        </div>
+    </div>
+
+    <form method="GET"
+          action="{{ url_for('admin.enquiries') }}"
+          style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;">
+
+        <input type="search"
+               name="q"
+               value="{{ search|default('') }}"
+               placeholder="Search name, email, company or topic...">
+
+        <select name="status">
+            <option value="">All statuses</option>
+            <option value="new" {% if selected_status == 'new' %}selected{% endif %}>New</option>
+            <option value="read" {% if selected_status == 'read' %}selected{% endif %}>Read</option>
+            <option value="replied" {% if selected_status == 'replied' %}selected{% endif %}>Replied</option>
+            <option value="closed" {% if selected_status == 'closed' %}selected{% endif %}>Closed</option>
+        </select>
+
+        <button type="submit" class="va-btn va-btn-secondary">Search</button>
+        <a href="{{ url_for('admin.enquiries') }}" class="va-btn va-btn-secondary">Clear</a>
+    </form>
+
+    <div class="va-table-wrap">
+        <table class="va-table">
+            <thead>
+                <tr>
+                    <th>Contact</th>
+                    <th>Company</th>
+                    <th>Topic</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Received</th>
+                    <th>Admin Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for item in enquiries %}
+                <tr>
+                    <td>
+                        <div class="va-person-cell">
+                            <span class="va-avatar">{{ (item.name|default('V', true))[:1]|upper }}</span>
+                            <span>
+                                <strong>{{ item.name|default('Website visitor', true) }}</strong>
+                                <a href="mailto:{{ item.email }}">{{ item.email }}</a>
+                                {% if item.phone %}
+                                    <small>{{ item.phone }}</small>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>{{ item.company|default('—', true) }}</td>
+                    <td>{{ item.subject|default('General enquiry', true) }}</td>
+
+                    <td>
+                        <div class="va-message-cell">
+                            {{ item.message|default('—', true) }}
+                        </div>
+                    </td>
+
+                    <td>
+                        <form method="POST"
+                              action="{{ url_for('admin.enquiry_status', item_id=item.id) }}"
+                              class="va-status-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <select name="status" aria-label="Update enquiry status">
+                                <option value="new" {% if item.status == 'new' %}selected{% endif %}>New</option>
+                                <option value="read" {% if item.status == 'read' %}selected{% endif %}>Read</option>
+                                <option value="replied" {% if item.status == 'replied' %}selected{% endif %}>Replied</option>
+                                <option value="closed" {% if item.status == 'closed' %}selected{% endif %}>Closed</option>
+                            </select>
+
+                            <button type="submit" class="va-btn va-btn-secondary va-btn-small">Save</button>
+                        </form>
+                    </td>
+
+                    <td>
+                        {{ item.created_at.strftime('%d %b %Y') if item.created_at else '—' }}
+                    </td>
+
+                    <td>
+                        <form method="POST"
+                              action="{{ url_for('admin.enquiry_update', enquiry_id=item.id) }}"
+                              style="min-width:190px;">
+
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <textarea name="admin_notes"
+                                      rows="3"
+                                      maxlength="5000"
+                                      placeholder="Internal notes...">{{ item.admin_notes|default('', true) }}</textarea>
+
+                            <button type="submit" class="va-btn va-btn-secondary va-btn-small">
+                                Save Notes
+                            </button>
+                        </form>
+                    </td>
+
+                    <td>
+                        <form method="POST"
+                              action="{{ url_for('admin.enquiry_delete', enquiry_id=item.id) }}"
+                              onsubmit="return confirm('Permanently delete this enquiry? This cannot be undone.');">
+
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <button type="submit"
+                                    class="va-btn va-btn-small"
+                                    style="background:#dc2626;color:white;border:0;">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">
+                        <div class="va-table-empty">
+                            <i data-lucide="inbox"></i>
+                            <strong>No enquiries found</strong>
+                            <span>Try changing your search or status filter.</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

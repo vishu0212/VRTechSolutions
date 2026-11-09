@@ -1,0 +1,77 @@
+/* VR Tech Solutions — unified premium corporate design system */
+:root {
+  --brand-navy: #0b1f3a;
+  --brand-blue: #2563eb;
+  --brand-blue-deep: #1746a2;
+  --brand-cyan: #38bdf8;
+  --brand-ink: #142238;
+  --brand-muted: #64748b;
+  --brand-line: #e2e8f0;
+  --brand-surface: #ffffff;
+  --brand-soft: #f4f7fc;
+  --brand-shadow: 0 18px 48px rgba(15, 35, 66, .09);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif; }
+body.vtx-body, body:not(.va-body):not(.va-login-body) {
+  background: #f5f7fb;
+  color: var(--brand-ink);
+}
+.vtx-ambient, .ambient-canvas-backdrop {
+  opacity: .72;
+  background: radial-gradient(ellipse at 78% 12%, rgba(37,99,235,.10), transparent 42%),
+              radial-gradient(ellipse at 12% 72%, rgba(56,189,248,.07), transparent 38%);
+}
+/* Public site navigation */
+.vtx-header-wrap, .glass-navbar {
+  background: rgba(255,255,255,.94) !important;
+  border: 1px solid rgba(226,232,240,.9) !important;
+  box-shadow: 0 8px 30px rgba(15,35,66,.06) !important;
+  backdrop-filter: blur(18px);
+}
+.vtx-navbar { max-width: 1320px; margin: 0 auto; padding-inline: 26px; }
+.vtx-nav a, .nav-item { color: #334155; font-weight: 650; }
+.vtx-nav a:hover, .nav-item:hover, .vtx-nav a.is-active { color: var(--brand-blue) !important; }
+.vtx-theme-button, .vtx-icon-button { border: 1px solid var(--brand-line); border-radius: 12px; }
+/* Home page hero and sections */
+body:has(.ambient-canvas-backdrop) { background: #f5f7fb; color: var(--brand-ink); }
+body:has(.ambient-canvas-backdrop) [data-theme="light"] { --bg-page:#f5f7fb; --bg-gradient-1:rgba(37,99,235,.10); --bg-gradient-2:rgba(56,189,248,.07); --bg-gradient-3:rgba(23,70,162,.06); --glass-nav:rgba(255,255,255,.94); --glass-card:#fff; --glass-card-hover:#f8fbff; --glass-pill:#fff; --glass-border:#e4ebf5; --subtle-border:#e2e8f0; --text-main:#142238; --text-secondary:#526276; --text-muted:#718096; --logo-tech-color:#0b1f3a; --logo-sub-color:#526276; }
+.headline-gradient { background: linear-gradient(100deg,#1746a2 0%,#2563eb 55%,#0891b2 100%); -webkit-background-clip:text; background-clip:text; }
+.btn-nav-launch, .btn-hero-launch { background: linear-gradient(105deg,#12356b,#2563eb 72%,#0891b2) !important; box-shadow: 0 12px 28px rgba(37,99,235,.22) !important; border-radius: 12px !important; }
+.glass-pill-badge, .satellite-node-card, .service-bottom-card { border: 1px solid #e3eaf4 !important; box-shadow: 0 12px 30px rgba(15,35,66,.07) !important; }
+.satellite-node-card:hover, .service-bottom-card:hover { border-color: rgba(37,99,235,.42) !important; box-shadow: 0 18px 38px rgba(37,99,235,.12) !important; }
+.home-footer { background: #0b1f3a !important; color: #e8eef8 !important; border-radius: 28px 28px 0 0; }
+.home-footer p, .home-footer a { color: #b7c5d9; }
+.home-footer a:hover { color: #fff; }
+/* Inner public pages */
+.vtx-main { min-height: 65vh; }
+.vtx-section, .vtx-section-tint { padding-block: clamp(58px,7vw,100px); }
+.vtx-section-tint { background: linear-gradient(180deg,#eef3fa,#f7f9fc); }
+.vtx-section-heading { max-width: 760px; margin-inline: auto; }
+.vtx-section-heading h2, .vtx-hero h1 { color: var(--brand-navy); }
+.vtx-gradient-text { color: var(--brand-blue) !important; background: none !important; -webkit-text-fill-color: currentColor !important; }
+.vtx-card, .vtx-process-card, .vtx-contact-panel, .vtx-project-card, .vtx-service-card {
+  border: 1px solid var(--brand-line) !important; border-radius: 20px !important;
+  box-shadow: 0 12px 34px rgba(15,35,66,.055) !important;
+}
+.vtx-card:hover, .vtx-project-card:hover, .vtx-service-card:hover { transform: translateY(-4px); box-shadow: var(--brand-shadow) !important; }
+.vtx-button, .btn, button.vtx-button { border-radius: 12px !important; font-weight: 750; }
+.vtx-button-primary, .vtx-form-submit { background: linear-gradient(105deg,#12356b,#2563eb) !important; box-shadow: 0 10px 24px rgba(37,99,235,.18); }
+input, select, textarea { border-radius: 10px; }
+.vtx-footer { background: #0b1f3a !important; color: #e8eef8; }
+.vtx-footer p, .vtx-footer a { color: #b7c5d9; }
+.vtx-footer a:hover { color: #fff; }
+/* Admin console */
+.va-body { background: #f3f6fb !important; color: #142238; }
+.va-sidebar { background: #0b1f3a !important; }
+.va-brand-mark { background: linear-gradient(135deg,#2563eb,#0891b2) !important; }
+.va-panel, .va-stat-card, .va-card { border: 1px solid #e2e8f0 !important; border-radius: 16px !important; box-shadow: 0 10px 28px rgba(15,35,66,.05) !important; }
+.va-btn-primary { background: #2563eb !important; }
+@media (max-width: 760px) {
+  .vtx-navbar { padding-inline: 16px; }
+  .home-footer { border-radius: 20px 20px 0 0; }
+  .vtx-section, .vtx-section-tint { padding-block: 52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

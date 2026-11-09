@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Search | VR Tech Solutions{% endblock %}
+
+{% block meta_description %}
+Search services, projects, and information from VR Tech Solutions.
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/vtx-apply-search.css') }}">
+{% endblock %}
+
+{% block content %}
+{% set search_query = query|default(request.args.get('q', ''), true) %}
+{% set search_results = results|default([], true) %}
+
+<section class="vtx-as-search-hero">
+    <div class="vtx-as-hero-glow vtx-as-glow-one"></div>
+    <div class="vtx-as-hero-glow vtx-as-glow-two"></div>
+
+    <div class="vtx-container">
+        <div class="vtx-as-search-intro">
+            <div class="vtx-kicker">
+                <span class="vtx-kicker-dot"></span>
+                SEARCH VR TECH SOLUTIONS
+            </div>
+
+            <h1>
+                Find your next
+                <span class="vtx-gradient-text">answer.</span>
+            </h1>
+
+            <p class="vtx-lead">
+                Search our services, project concepts, and website pages.
+            </p>
+
+            <form class="vtx-as-search-form"
+                  id="vtxSearchPageForm"
+                  method="get"
+                  action="{{ url_for('main.search') }}"
+                  role="search">
+
+                <i data-lucide="search" class="vtx-as-search-icon"></i>
+
+                <label class="vtx-as-sr-only" for="vtxSearchQuery">
+                    Search term
+                </label>
+
+                <input id="vtxSearchQuery"
+                       type="search"
+                       name="q"
+                       value="{{ search_query }}"
+                       placeholder="Try AI, software development, projects..."
+                       maxlength="160"
+                       autocomplete="off">
+
+                {% if search_query %}
+                <a class="vtx-as-search-clear"
+                   href="{{ url_for('main.search') }}"
+                   aria-label="Clear search">
+                    Clear
+                </a>
+                {% endif %}
+
+                <button type="submit" class="vtx-button vtx-button-primary">
+                    Search <span>↗</span>
+                </button>
+            </form>
+
+            {% if search_query %}
+            <p class="vtx-as-search-status">
+                Results for <strong>“{{ search_query }}”</strong>
+            </p>
+            {% else %}
+            <div class="vtx-as-search-suggestions">
+                <span>Popular:</span>
+                <button type="button" data-search-term="AI">AI</button>
+                <button type="button" data-search-term="software">Software</button>
+                <button type="button" data-search-term="automation">Automation</button>
+                <button type="button" data-search-term="careers">Careers</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="vtx-section vtx-as-search-results-section">
+    <div class="vtx-container">
+
+        {% if search_query %}
+
+            {% if search_results %}
+            <div class="vtx-as-results-heading">
+                <div>
+                    <div class="vtx-kicker">SEARCH RESULTS</div>
+                    <h2>What we found</h2>
+                </div>
+
+                <span class="vtx-as-result-count">
+                    {{ search_results|length }}
+                    result{% if search_results|length != 1 %}s{% endif %}
+                </span>
+            </div>
+
+            <div class="vtx-as-result-list">
+                {% for result in search_results %}
+                <article class="vtx-as-result-card">
+                    <div class="vtx-as-result-symbol">
+                        <i data-lucide="file-text"></i>
+                    </div>
+
+                    <div class="vtx-as-result-body">
+                        {% set result_title = result.title|default(result.name|default('Search result', true), true) %}
+                        {% set result_url = result.url|default(result.link|default('#', true), true) %}
+                        {% set result_description = result.description|default(result.snippet|default(result.content|default('Explore this page for more information.', true), true), true) %}
+
+                        {% if result.category is defined and result.category %}
+                        <span class="vtx-as-result-category">
+                            {{ result.category }}
+                        </span>
+                        {% endif %}
+
+                        <h3>
+                            <a href="{{ result_url }}">{{ result_title }}</a>
+                        </h3>
+
+                        <p>{{ result_description }}</p>
+
+                        {% if result_url != '#' %}
+                        <a class="vtx-card-link" href="{{ result_url }}">
+                            Open page <span>↗</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            <div class="vtx-as-empty-state">
+                <div class="vtx-as-empty-icon">
+                    <i data-lucide="search-x"></i>
+                </div>
+
+                <div class="vtx-kicker">NO MATCHES FOUND</div>
+
+                <h2>Try a different search term.</h2>
+
+                <p>
+                    Check your spelling or search a broader topic such as AI,
+                    software, automation, projects, or careers.
+                </p>
+
+                <button class="vtx-button vtx-button-primary"
+                        type="button"
+                        id="vtxTryAgainButton">
+                    Change search <span>↗</span>
+                </button>
+            </div>
+            {% endif %}
+
+        {% else %}
+            <div class="vtx-as-results-heading">
+                <div>
+                    <div class="vtx-kicker">EXPLORE THE SITE</div>
+                    <h2>Where would you like to start?</h2>
+                </div>
+            </div>
+
+            <div class="vtx-as-quick-grid">
+
+                <a href="{{ url_for('main.services') }}"
+                   class="vtx-as-quick-card">
+                    <span class="vtx-as-quick-icon vtx-ico-blue">
+                        <i data-lucide="layers"></i>
+                    </span>
+                    <strong>Our services</strong>
+                    <small>AI, software, automation, and cloud.</small>
+                    <span class="vtx-as-quick-arrow">↗</span>
+                </a>
+
+                <a href="{{ url_for('main.projects') }}"
+                   class="vtx-as-quick-card">
+                    <span class="vtx-as-quick-icon vtx-ico-purple">
+                        <i data-lucide="boxes"></i>
+                    </span>
+                    <strong>Projects</strong>
+                    <small>Explore project concepts and capabilities.</small>
+                    <span class="vtx-as-quick-arrow">↗</span>
+                </a>
+
+                <a href="{{ url_for('main.about') }}"
+                   class="vtx-as-quick-card">
+                    <span class="vtx-as-quick-icon vtx-ico-cyan">
+                        <i data-lucide="building-2"></i>
+                    </span>
+                    <strong>About us</strong>
+                    <small>Learn about our approach and values.</small>
+                    <span class="vtx-as-quick-arrow">↗</span>
+                </a>
+
+                <a href="{{ url_for('careers.careers') }}"
+                   class="vtx-as-quick-card">
+                    <span class="vtx-as-quick-icon vtx-ico-pink">
+                        <i data-lucide="users"></i>
+                    </span>
+                    <strong>Careers</strong>
+                    <small>Explore career paths and apply.</small>
+                    <span class="vtx-as-quick-arrow">↗</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="vtx-container vtx-cta">
+    <div class="vtx-cta-inner">
+        <div class="vtx-kicker">NEED SOMETHING SPECIFIC?</div>
+
+        <h2>
+            Ask us about your
+            <span>project idea.</span>
+        </h2>
+
+        <p>
+            Our contact page is the best place to share a requirement that you
+            couldn't find here.
+        </p>
+
+        <a href="{{ url_for('main.contact') }}"
+           class="vtx-button vtx-button-white">
+            Contact VR Tech Solutions <span>↗</span>
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/vtx-apply-search.js') }}" defer></script>
+{% endblock %}

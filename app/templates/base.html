@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2f5ff">
+    <title>{% block title %}VR Tech Solutions — Empowering Tomorrow's Innovations{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}VR Tech Solutions delivers intelligent software, AI, automation, cloud, and digital transformation solutions.{% endblock %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vr-theme.css') }}">
+    {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/professional.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/brand-refresh.css') }}">
+</head>
+<body class="vtx-body">
+    <div class="vtx-ambient" aria-hidden="true"></div>
+
+    <header class="vtx-header-wrap">
+        <div class="vtx-navbar">
+            <a href="{{ url_for('main.index') }}" class="vtx-brand" aria-label="VR Tech Solutions home">
+                <span class="vtx-logo-symbol" aria-hidden="true">
+                    <svg viewBox="0 0 210 135" role="img" aria-label="VR">
+                        <defs>
+                            <linearGradient id="vtxFacetPinkBlue" x1="0%" y1="0%" x2="85%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF0F8"/><stop offset="28%" stop-color="#F472B6"/><stop offset="65%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#0284C7"/>
+                            </linearGradient>
+                            <linearGradient id="vtxFacetElectric" x1="10%" y1="100%" x2="95%" y2="0%">
+                                <stop offset="0%" stop-color="#1D4ED8"/><stop offset="45%" stop-color="#00B4FF"/><stop offset="85%" stop-color="#00F0FF"/><stop offset="100%" stop-color="#E0FFFF"/>
+                            </linearGradient>
+                            <linearGradient id="vtxOrbit" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#FF2E93"/><stop offset="45%" stop-color="#C026D3"/><stop offset="75%" stop-color="#00F0FF"/><stop offset="100%" stop-color="#D946EF"/>
+                            </linearGradient>
+                        </defs>
+                        <ellipse cx="105" cy="68" rx="96" ry="32" transform="rotate(-24 105 68)" fill="none" stroke="url(#vtxOrbit)" stroke-width="5.5" stroke-dasharray="290 320" stroke-dashoffset="35"/>
+                        <ellipse cx="110" cy="72" rx="88" ry="26" transform="rotate(-17 110 72)" fill="none" stroke="#00F0FF" stroke-width="3" stroke-dasharray="220 350" stroke-dashoffset="-40" opacity=".85"/>
+                        <polygon points="18,22 46,22 82,92 67,120" fill="url(#vtxFacetPinkBlue)"/>
+                        <polygon points="82,92 114,22 140,22 92,120 67,120" fill="url(#vtxFacetElectric)"/>
+                        <polygon points="18,22 46,22 65,58 36,56" fill="#fff" opacity=".38"/>
+                        <path d="M106,22 L156,22 C180,22 192,35 192,52 C192,68 180,79 160,82 L190,120 L160,120 L133,83 L112,83 L122,62 L150,62 C160,62 166,58 166,52 C166,45 160,41 150,41 L97,41 Z" fill="url(#vtxFacetElectric)"/>
+                        <path d="M18,98 C55,112 145,78 192,32" fill="none" stroke="url(#vtxOrbit)" stroke-width="4.5"/>
+                        <circle cx="188" cy="25" r="4.5" fill="#fff"/><circle cx="19" cy="97" r="4" fill="#FF66C4"/>
+                    </svg>
+                </span>
+                <span class="vtx-brand-type"><strong>TECH</strong><small>SOLUTIONS</small></span>
+            </a>
+
+            <nav class="vtx-nav" id="vtxNavigation" aria-label="Main navigation">
+                <a class="{% if request.endpoint == 'main.index' %}is-active{% endif %}" href="{{ url_for('main.index') }}">Home</a>
+                <a class="{% if request.endpoint == 'main.about' %}is-active{% endif %}" href="{{ url_for('main.about') }}">About</a>
+                <a class="{% if request.endpoint == 'main.services' %}is-active{% endif %}" href="{{ url_for('main.services') }}">Services</a>
+                <a class="{% if request.endpoint == 'main.projects' %}is-active{% endif %}" href="{{ url_for('main.projects') }}">Projects</a>
+                <a class="{% if request.endpoint == 'careers.careers' %}is-active{% endif %}" href="{{ url_for('careers.careers') }}">Careers</a>
+                <a class="{% if request.endpoint == 'main.contact' %}is-active{% endif %}" href="{{ url_for('main.contact') }}">Contact</a>
+            </nav>
+
+            <div class="vtx-nav-actions">
+                <button class="vtx-icon-button vtx-search-button" type="button" id="vtxSearchButton" aria-label="Search website" title="Quick search (Ctrl+K)">
+                    <i data-lucide="search"></i>
+                </button>
+                <button class="vtx-theme-button" type="button" id="vtxThemeToggle" aria-label="Toggle light and dark theme">
+                    <i data-lucide="moon" id="vtxThemeIcon"></i><span id="vtxThemeLabel">Neon Dark</span>
+                </button>
+                <button class="vtx-mobile-toggle" type="button" id="vtxMobileToggle" aria-label="Open navigation" aria-controls="vtxNavigation" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="vtx-flash-wrap" aria-live="polite">
+            {% for category, message in messages %}
+                <div class="vtx-flash vtx-flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="vtx-main" id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="vtx-footer">
+        <div class="vtx-footer-inner">
+            <div class="vtx-footer-main">
+                <div class="vtx-footer-about">
+                    <a href="{{ url_for('main.index') }}" class="vtx-footer-brand">
+                        <span class="vtx-footer-mark">VR</span>
+                        <span><strong>VR TECH SOLUTIONS</strong><small>Technology with purpose.</small></span>
+                    </a>
+                    <p>We design and build practical digital solutions that help businesses work smarter and move forward with confidence.</p>
+                </div>
+                <div class="vtx-footer-social">
+                    <h2>Follow us</h2>
+                    <div class="vtx-social-icons" aria-label="Social media">
+                        <span class="vtx-social-icon" role="img" aria-label="Instagram" title="Instagram">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle class="vtx-social-dot" cx="18" cy="6.5" r="1"></circle></svg>
+                        </span>
+                        <span class="vtx-social-icon" role="img" aria-label="Facebook" title="Facebook">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="vtx-social-fill" d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8z"></path></svg>
+                        </span>
+                        <span class="vtx-social-icon" role="img" aria-label="X / Twitter" title="X / Twitter">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="vtx-social-fill" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.7 5.6 22H2.4l7.3-8.4L1.8 2h6.5l4.5 6.7zm-1.1 18h1.7L7.3 3.9H5.5z"></path></svg>
+                        </span>
+                        <span class="vtx-social-icon" role="img" aria-label="LinkedIn" title="LinkedIn">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="vtx-social-fill" d="M5.2 8.5a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M3.7 10h3v10h-3zm5 0h2.9v1.4h.1c.4-.8 1.4-1.7 2.9-1.7 3.1 0 3.7 2 3.7 4.6V20h-3v-5c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6V20h-3z"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vtx-footer-bottom">
+                <span>© {{ now().year if now is defined else 2026 }} VR Tech Solutions. All rights reserved.</span>
+                <nav class="vtx-footer-legal" aria-label="Legal and support">
+                    <a href="{{ url_for('main.privacy_policy') }}">Privacy Policy</a>
+                    <a href="{{ url_for('main.contact') }}">Help &amp; Support</a>
+                    <a href="{{ url_for('admin.login') }}">Admin login</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Launch Project dialog; form posts to the existing contact route. -->
+    <div class="vtx-modal" id="vtxLaunchModal" hidden role="dialog" aria-modal="true" aria-labelledby="vtxLaunchTitle">
+        <div class="vtx-modal-backdrop" data-close-launch></div>
+        <div class="vtx-modal-panel">
+            <div class="vtx-modal-heading">
+                <div><span class="vtx-kicker">VR TECH SOLUTIONS / RAPID DISCOVERY</span><h2 id="vtxLaunchTitle">Launch your innovation</h2></div>
+                <button type="button" class="vtx-icon-button" aria-label="Close dialog" data-close-launch><i data-lucide="x"></i></button>
+            </div>
+            <p class="vtx-modal-copy">Tell us how to reach you and which technology area you want to explore.</p>
+            <form method="post" action="{{ url_for('main.contact') }}" id="vtxLaunchForm" class="vtx-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="name" value="Website visitor">
+                <input type="hidden" name="subject" value="Architecture session request">
+                <input type="hidden" name="message" id="vtxLaunchMessage" value="Please contact me about a technology project.">
+                <label for="vtxLaunchEmail">Work email</label>
+                <input id="vtxLaunchEmail" type="email" name="email" placeholder="you@company.com" required>
+                <label for="vtxLaunchService">What would you like to discuss?</label>
+                <select id="vtxLaunchService" name="service">
+                    <option>Artificial Intelligence</option><option>Software Development</option><option>Business Automation</option><option>Cloud &amp; Data</option><option>Cybersecurity</option><option>IT Consulting</option>
+                </select>
+                <button class="vtx-button vtx-button-primary vtx-form-submit" type="submit">Send project enquiry <span>↗</span></button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.VRTECH = { searchUrl: {{ url_for('main.search')|tojson }} };
+    </script>
+    <script src="{{ url_for('static', filename='js/vr-theme.js') }}" defer></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

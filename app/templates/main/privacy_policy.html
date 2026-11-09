@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy | VR Tech Solutions{% endblock %}
+{% block meta_description %}Learn how VR Tech Solutions handles information submitted through its contact and careers forms.{% endblock %}
+{% block content %}
+<section class="vtx-section">
+    <div class="vtx-container">
+        <header class="vtx-section-heading">
+            <div class="vtx-kicker">YOUR INFORMATION</div>
+            <h1>Privacy <span class="vtx-gradient-text">Policy</span></h1>
+            <p>This page explains how information submitted through this website is used.</p>
+        </header>
+
+        <article class="vtx-policy-content">
+            <section>
+                <h2>Information you provide</h2>
+                <p>When you use the contact form, we receive the details you submit, such as your name, email address, subject, and message. When you apply for a role, we receive the information in your application, including your contact details, resume, and any introduction or portfolio details you provide.</p>
+            </section>
+
+            <section>
+                <h2>How information is used</h2>
+                <p>We use submitted information to respond to enquiries, review job applications, and manage related business communications. Access to job applications and resume files is restricted to authorized administrators.</p>
+            </section>
+
+            <section>
+                <h2>Storage and retention</h2>
+                <p>Information is stored in the website's application database and uploaded files are kept in private storage. We retain information for as long as it is needed for the purpose it was submitted, subject to applicable record-keeping requirements.</p>
+            </section>
+
+            <section>
+                <h2>Sharing and security</h2>
+                <p>We do not display submitted contact details or resumes on public pages. Information may be accessed by authorized personnel and service providers who support operation of the website, or disclosed where required by law. We use access controls, but no internet transmission or storage method can be guaranteed completely secure.</p>
+            </section>
+
+            <section>
+                <h2>Your choices and questions</h2>
+                <p>If you have a question about information you submitted or would like to request its correction or removal, contact us through <a href="{{ url_for('main.contact') }}">Help &amp; Support</a>. We may need to verify your request before acting on it.</p>
+            </section>
+
+            <p class="vtx-policy-note">Please do not submit passwords, payment information, or other sensitive information through the website forms.</p>
+        </article>
+    </div>
+</section>
+{% endblock %}
