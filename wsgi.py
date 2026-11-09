@@ -1,8 +1,11 @@
 """WSGI entrypoint for deployment platforms."""
 
-from dotenv import load_dotenv
+import os
 
-load_dotenv()
+if not os.getenv("VERCEL"):
+    from dotenv import load_dotenv
+
+    load_dotenv()
 
 from app import create_app
 

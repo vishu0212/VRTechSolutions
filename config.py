@@ -5,8 +5,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 
 # =========================================================
 # ENVIRONMENT
@@ -14,10 +12,12 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 
-# Load environment variables from the project root.
-load_dotenv(BASE_DIR / ".env")
-
 IS_VERCEL = bool(os.getenv("VERCEL"))
+
+if not IS_VERCEL:
+    from dotenv import load_dotenv
+
+    load_dotenv(BASE_DIR / ".env")
 
 
 # =========================================================
